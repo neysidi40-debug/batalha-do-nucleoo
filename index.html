@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batalha do Núcleo</title>
 
-    <!-- Fontes agressivas estilo grafite/pixação -->
+    <!-- Fontes estilo grafite/pixação -->
     <link href="https://fonts.googleapis.com/css2?family=Frijole&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
 
@@ -16,7 +16,6 @@
             background: url('batalha.png') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
-            position: relative;
         }
 
         body::before {
@@ -29,108 +28,161 @@
         }
 
         header {
-            padding: 40px 20px;
+            padding: 20px 10px;
             text-align: center;
-            font-size: 50px;
+            font-size: 28px;
             font-family: 'Rock Salt', cursive;
-            letter-spacing: 3px;
+            letter-spacing: 1px;
             color: white;
-            text-shadow: 5px 5px 0px black;
+            text-shadow: 0 0 6px #ff00ff, 1px 1px 0 black;
             position: relative;
         }
 
         header::after {
             content: "///////////";
             font-family: 'Rock Salt';
-            font-size: 30px;
+            font-size: 16px;
             color: white;
             position: absolute;
-            bottom: -20px;
-            left: 20px;
+            bottom: -10px;
+            left: 5px;
             opacity: 0.9;
         }
         header::before {
             content: "XXXXXXX";
             font-family: 'Rock Salt';
-            font-size: 35px;
+            font-size: 20px;
             color: black;
             position: absolute;
-            top: -10px;
-            right: 30px;
+            top: -5px;
+            right: 10px;
             opacity: 0.9;
         }
 
-        .layout {
-            display: flex;
-            gap: 20px;
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
+        /* Botão de menu */
+        .menu-btn {
+            font-size: 22px;
+            cursor: pointer;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+            color: white;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 10px;
+            border-radius: 5px;
+            text-shadow: 0 0 3px #ff00ff, 1px 1px 1px black;
+            transition: transform 0.2s;
+        }
+        .menu-btn:hover {
+            transform: scale(1.1);
         }
 
+        /* Sidebar deslizante */
         .sidebar {
-            width: 30%;
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.97);
+            overflow-x: hidden;
+            transition: 0.4s;
+            padding-top: 40px;
+            color: #fff;
+            box-shadow: 4px 0 12px rgba(255,0,255,0.4);
         }
 
+        .sidebar h2, .sidebar p, .sidebar a {
+            padding: 6px 20px;
+            font-family: 'Rock Salt', cursive;
+            transition: 0.3s;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            text-shadow: 0 0 5px #ff00ff, 1px 1px 0 black;
+        }
+
+        .sidebar p {
+            font-size: 14px;
+            text-shadow: 1px 1px 1px black;
+        }
+
+        .sidebar a {
+            font-size: 16px;
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            text-shadow: 0 0 3px #00ffff, 1px 1px 1px black;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            color: #ffcc00;
+            text-shadow: 0 0 8px #ff00ff, 1px 1px 1px black;
+        }
+
+        .sidebar iframe {
+            width: 90%;
+            height: 150px;
+            border: 0;
+            border-radius: 10px;
+            margin: 10px auto;
+            display: block;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: white;
+            text-shadow: 0 0 5px #ff00ff, 1px 1px 1px black;
+        }
+        .close-btn:hover {
+            color: #ffcc00;
+        }
+
+        /* Conteúdo principal */
         .main {
-            width: 70%;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
         }
 
         .card {
             background: rgba(0,0,0,0.7);
             border: 3px solid white;
-            padding: 25px;
+            padding: 15px;
             border-radius: 12px;
-            margin-top: 35px;
-            box-shadow: 0px 0px 15px black;
-            position: relative;
+            box-shadow: 0 0 12px #ff00ff, 0 0 10px black;
+            max-width: 380px;
+            text-align: center;
         }
 
-        .card::before {
-            content: "////";
-            font-family: 'Rock Salt';
-            font-size: 26px;
-            color: white;
-            position: absolute;
-            top: -20px;
-            left: -10px;
-        }
-
-        .card::after {
-            content: "XXXXX";
-            font-family: 'Rock Salt';
-            font-size: 30px;
-            color: black;
-            position: absolute;
-            bottom: -25px;
-            right: -5px;
-        }
-
-        h2 {
-            color: white;
-            font-size: 28px;
-            font-family: 'Rock Salt', cursive';
-            text-shadow: 2px 2px 0px black;
-        }
-
-        p {
+        .card h2 {
             font-size: 20px;
-            font-weight: bold;
-            text-shadow: 3px 3px 4px black;
+        }
+
+        .card p {
+            font-size: 14px;
         }
 
         .btn {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 10px;
             background: white;
             color: black;
-            padding: 16px 24px;
-            border-radius: 6px;
-            font-size: 22px;
+            padding: 12px 18px;
+            border-radius: 5px;
+            font-size: 16px;
             font-family: 'Rock Salt', cursive;
             text-decoration: none;
-            transition: 0.2s;
-            box-shadow: 4px 4px 0px black;
+            transition: 0.3s;
+            box-shadow: 3px 3px 0px black;
         }
 
         .btn:hover {
@@ -138,122 +190,146 @@
             transform: scale(1.05) rotate(-1deg);
         }
 
-        /* Painéis recolhíveis */
-        details {
-            background: rgba(0,0,0,0.7);
-            border: 3px solid white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 25px;
-            box-shadow: 0px 0px 10px black;
-        }
-
-        summary {
-            font-family: 'Rock Salt';
-            font-size: 24px;
-            cursor: pointer;
-            text-shadow: 2px 2px 2px black;
-        }
-
-        .curio-item {
-            font-size: 18px;
-            margin-top: 10px;
-            padding-left: 10px;
-            border-left: 3px solid white;
-        }
-
-        .curio-item a {
-            color: white;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-
-        .curio-item a:hover {
-            color: #ffcc00;
-        }
-
-        iframe {
-            width: 100%;
-            height: 260px;
-            border: 0;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-
+        /* Footer */
         footer {
             text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            font-size: 16px;
+            margin-top: 25px;
+            padding: 10px;
+            font-size: 12px;
             color: #fff;
-            text-shadow: 2px 2px 5px black;
+            text-shadow: 0 0 5px #ff00ff, 1px 1px 2px black;
             font-family: 'Rock Salt';
         }
+
+        /* Scroll se conteúdo ultrapassar altura */
+        .sidebar-content {
+            max-height: calc(100% - 60px);
+            overflow-y: auto;
+            padding-bottom: 10px;
+        }
+
+        /* Responsivo para celular vertical */
+        @media (max-width: 480px) {
+            header {
+                font-size: 24px;
+            }
+            .menu-btn {
+                font-size: 20px;
+                padding: 5px 8px;
+            }
+            .sidebar {
+                width: 0;
+                transition: 0.3s;
+            }
+            .sidebar.open {
+                width: 100%;
+                box-shadow: none;
+                padding-top: 40px;
+            }
+            .sidebar h2 {
+                font-size: 16px;
+            }
+            .sidebar p, .sidebar a {
+                font-size: 12px;
+            }
+            .sidebar iframe {
+                height: 140px;
+            }
+            .card {
+                max-width: 90%;
+                padding: 12px;
+            }
+            .card h2 {
+                font-size: 18px;
+            }
+            .card p {
+                font-size: 12px;
+            }
+            .btn {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+        }
+
     </style>
 </head>
 <body>
 
-    <header>BATALHA DO NÚCLEO</header>
+<header>BATALHA DO NÚCLEO</header>
 
-    <div class="layout">
+<!-- Botão de menu -->
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-        <!-- SIDE ESQUERDO - Localização + Curiosidades + Menu -->
-        <div class="sidebar">
+<!-- Sidebar deslizante -->
+<div id="mySidebar" class="sidebar">
+    <div class="close-btn" onclick="closeMenu()">×</div>
+    <div class="sidebar-content">
 
-            <details>
-                <summary>📍 Localização</summary>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.7307001526824!2d-34.9320465!3d-7.923172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab170077a0d0f9%3A0x8868397509e33580!2zUHJhw6dhIElJIC0gQ2FldMOpcyAx!5e0!3m2!1spt-BR!2sbr!4v1763388117642!5m2!1spt-BR!2sbr"
-                        loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </details>
+        <h2>📍 Local</h2>
+        <p>PRAÇA DO TERMINAL - CAETÉS 1</p>
 
-            <details>
-                <summary>🎤 Curiosidades</summary>
+        <h2>⏰ Dia & Horário</h2>
+        <p>Toda quinta-feira às 18:00</p>
 
-                <div class="curio-item">🔥 As batalhas começaram nas ruas como protesto e expressão.</div>
-                <div class="curio-item">🎤 Muitos MCs famosos começaram em batalhas de bairro.</div>
-                <div class="curio-item">🏆 Criatividade > agressividade. A rima é a arma.</div>
-                <div class="curio-item">👊 As regras mudam conforme a cultura da região.</div>
+        <h2>🎤 Curiosidades</h2>
+        <p>🔥 As batalhas começaram nas ruas como protesto e expressão.</p>
+        <p>🎤 Muitos MCs famosos começaram em batalhas de bairro.</p>
+        <p>🏆 Criatividade &gt; agressividade. A rima é a arma.</p>
+        <p>👊 As regras mudam conforme a cultura da região.</p>
 
-            </details>
+        <h2>🏆 Rank de MCs</h2>
+        <a href="#">Ver Rank de MCs</a>
 
-            <details>
-                <summary>☰ Menu</summary>
-                <div class="curio-item">
-                    <a href="#">🏆 Ver Rank de MCs</a>
-                </div>
-            </details>
+        <h2>📍 Localização</h2>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.7307001526824!2d-34.9320465!3d-7.923172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab170077a0d0f9%3A0x8868397509e33580!2zUHJhw6dhIElJIC0gQ2FldMOpcyAx!5e0!3m2!1spt-BR!2sbr!4v1763388117642!5m2!1spt-BR!2sbr"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-        </div>
-
-        <!-- CONTEÚDO PRINCIPAL -->
-        <div class="main">
-
-            <div class="card">
-                <h2>📍 Local</h2>
-                <p>PRAÇA DO TERMINAL - CAETÉS 1</p>
-            </div>
-
-            <div class="card">
-                <h2>⏰ Dia & Horário</h2>
-                <p>Toda quinta-feira às 18:00</p>
-            </div>
-
-            <div class="card">
-                <h2>📲 Inscrições</h2>
-                <p>Clique no botão abaixo para se inscrever pelo WhatsApp!</p>
-
-                <a class="btn"
-                   href="https://chat.whatsapp.com/FaRGsrjJZlbIPEOsB0Zjlm"
-                   target="_blank">
-                   INSCREVER AGORA
-                </a>
-            </div>
-
-        </div>
     </div>
+</div>
 
-    <footer>Feito para a comunidade — Batalha do Núcleo - Steh & Kapu</footer>
+<!-- Conteúdo principal -->
+<div class="main">
+    <div class="card">
+        <h2>📲 Inscrições</h2>
+        <p>Clique no botão abaixo para se inscrever pelo WhatsApp!</p>
+
+        <a class="btn"
+           href="https://chat.whatsapp.com/FaRGsrjJZlbIPEOsB0Zjlm"
+           target="_blank">
+           INSCREVER AGORA
+        </a>
+
+        <!-- Aviso de inscrição gratuita -->
+        <p style="margin-top:8px; font-size:12px; color:#ffcc00; text-shadow: 0 0 4px black; font-family:'Rock Salt', cursive;">
+            ⚡ A inscrição é totalmente gratuita!
+        </p>
+    </div>
+</div>
+
+<footer>Feito para a comunidade — Batalha do Núcleo - Steh & Kapu</footer>
+
+<script>
+    function openMenu() {
+        document.getElementById("mySidebar").style.width = "280px";
+    }
+    function closeMenu() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("mySidebar").classList.remove('open');
+    }
+
+    function toggleMenu() {
+        const sidebar = document.getElementById("mySidebar");
+        if (window.innerWidth <= 480) {
+            sidebar.classList.toggle('open');
+        } else {
+            if(sidebar.style.width === "280px") {
+                sidebar.style.width = "0";
+            } else {
+                sidebar.style.width = "280px";
+            }
+        }
+    }
+</script>
 
 </body>
 </html>
