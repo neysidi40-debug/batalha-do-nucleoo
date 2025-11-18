@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranking de MCs</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: url('batalha.png') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(3px);
+        z-index: -1;
+    }
+
+    .container {
+        max-width: 450px;
+        margin: 40px auto;
+        background: rgba(0,0,0,0.65);
+        padding: 20px;
+        border-radius: 12px;
+        border: 2px solid white;
+        text-align: center;
+    }
+
+    h1 {
+        margin-top: 0;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    table th, table td {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid white;
+    }
+
+    table th {
+        background: rgba(255,255,255,0.15);
+    }
+
+    .btn-voltar {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 15px;
+        background: #00ff9f;
+        color: black;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏆 Ranking de MCs</h1>
+
+    <table id="rankTable">
+        <tr>
+            <th>Posição</th>
+            <th>MC</th>
+            <th>Pontos</th>
+        </tr>
+    </table>
+
+    <a class="btn-voltar" href="index.html">⬅ Voltar</a>
+</div>
+
+<script>
+    // LISTA SIMPLES DE MCs
+    const mcs = [
+        { nome: "MC Kapu", pontos: 120 },
+        { nome: "MC Steh", pontos: 95 },
+        { nome: "MC Zangado", pontos: 80 },
+        { nome: "MC Rato", pontos: 60 },
+        { nome: "MC Denny", pontos: 40 }
+    ];
+
+    // Ordena automaticamente os MCs por pontuação
+    const ordenado = mcs.sort((a, b) => b.pontos - a.pontos);
+
+    const tabela = document.getElementById("rankTable");
+
+    let posicao = 1;
+    ordenado.forEach(mc => {
+        tabela.innerHTML += `
+            <tr>
+                <td>${posicao}º</td>
+                <td>${mc.nome}</td>
+                <td>${mc.pontos}</td>
+            </tr>
+        `;
+        posicao++;
+    });
+</script>
+
+</body>
+</html>
