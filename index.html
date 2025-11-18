@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batalha do Núcleo</title>
 
-    <!-- Fontes estilo grafite/pixação -->
-    <link href="https://fonts.googleapis.com/css2?family=Frijole&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
-
     <style>
         body {
             margin: 0;
@@ -31,35 +27,31 @@
             padding: 20px 10px;
             text-align: center;
             font-size: 28px;
-            font-family: 'Rock Salt', cursive;
             letter-spacing: 1px;
             color: white;
-            text-shadow: 0 0 6px #ff00ff, 1px 1px 0 black;
+            font-weight: bold;
             position: relative;
         }
 
-        header::after {
-            content: "///////////";
-            font-family: 'Rock Salt';
-            font-size: 16px;
-            color: white;
-            position: absolute;
-            bottom: -10px;
-            left: 5px;
-            opacity: 0.9;
+        /* IMAGEM DO PATROCÍNIO */
+        .patrocinio {
+            text-align: center;
+            margin-top: 5px;
         }
-        header::before {
-            content: "XXXXXXX";
-            font-family: 'Rock Salt';
-            font-size: 20px;
-            color: black;
-            position: absolute;
-            top: -5px;
-            right: 10px;
+
+        .patrocinio img {
+            width: 180px;
+            max-width: 85%;
+        }
+
+        .patrocinio p {
+            margin-top: 4px;
+            font-size: 14px;
+            font-weight: bold;
             opacity: 0.9;
         }
 
-        /* Botão de menu */
+        /* Botão do menu */
         .menu-btn {
             font-size: 22px;
             cursor: pointer;
@@ -71,14 +63,13 @@
             background: rgba(0,0,0,0.6);
             padding: 6px 10px;
             border-radius: 5px;
-            text-shadow: 0 0 3px #ff00ff, 1px 1px 1px black;
-            transition: transform 0.2s;
-        }
-        .menu-btn:hover {
-            transform: scale(1.1);
         }
 
-        /* Sidebar deslizante */
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Sidebar */
         .sidebar {
             height: 100%;
             width: 0;
@@ -86,28 +77,30 @@
             z-index: 1000;
             top: 0;
             left: 0;
-            background-color: rgba(0,0,0,0.97);
+            background-color: rgba(0,0,0,0.95);
             overflow-x: hidden;
             transition: 0.4s;
             padding-top: 40px;
             color: #fff;
-            box-shadow: 4px 0 12px rgba(255,0,255,0.4);
+        }
+
+        .sidebar-content {
+            max-height: calc(100% - 60px);
+            overflow-y: auto;
+            padding-bottom: 10px;
         }
 
         .sidebar h2, .sidebar p, .sidebar a {
             padding: 6px 20px;
-            font-family: 'Rock Salt', cursive;
-            transition: 0.3s;
         }
 
         .sidebar h2 {
             font-size: 18px;
-            text-shadow: 0 0 5px #ff00ff, 1px 1px 0 black;
+            font-weight: bold;
         }
 
         .sidebar p {
             font-size: 14px;
-            text-shadow: 1px 1px 1px black;
         }
 
         .sidebar a {
@@ -115,13 +108,11 @@
             color: #fff;
             text-decoration: none;
             display: block;
-            text-shadow: 0 0 3px #00ffff, 1px 1px 1px black;
             margin-bottom: 6px;
         }
 
         .sidebar a:hover {
             color: #ffcc00;
-            text-shadow: 0 0 8px #ff00ff, 1px 1px 1px black;
         }
 
         .sidebar iframe {
@@ -140,8 +131,8 @@
             font-size: 28px;
             cursor: pointer;
             color: white;
-            text-shadow: 0 0 5px #ff00ff, 1px 1px 1px black;
         }
+
         .close-btn:hover {
             color: #ffcc00;
         }
@@ -155,10 +146,9 @@
 
         .card {
             background: rgba(0,0,0,0.7);
-            border: 3px solid white;
+            border: 2px solid white;
             padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 0 12px #ff00ff, 0 0 10px black;
+            border-radius: 10px;
             max-width: 380px;
             text-align: center;
         }
@@ -171,98 +161,65 @@
             font-size: 14px;
         }
 
+        /* BOTÃO VERDE */
         .btn {
             display: inline-block;
             margin-top: 10px;
-            background: white;
-            color: black;
+            background: #00c246; 
+            color: white;
             padding: 12px 18px;
             border-radius: 5px;
             font-size: 16px;
-            font-family: 'Rock Salt', cursive;
+            font-weight: bold;
             text-decoration: none;
-            transition: 0.3s;
-            box-shadow: 3px 3px 0px black;
+            transition: 0.2s;
+            border: 1px solid #008f33;
         }
 
         .btn:hover {
-            background: #e6e6e6;
-            transform: scale(1.05) rotate(-1deg);
+            background: #009b39;
         }
 
-        /* Footer */
         footer {
             text-align: center;
             margin-top: 25px;
             padding: 10px;
             font-size: 12px;
             color: #fff;
-            text-shadow: 0 0 5px #ff00ff, 1px 1px 2px black;
-            font-family: 'Rock Salt';
+            font-weight: bold;
         }
 
-        /* Scroll se conteúdo ultrapassar altura */
-        .sidebar-content {
-            max-height: calc(100% - 60px);
-            overflow-y: auto;
-            padding-bottom: 10px;
-        }
-
-        /* Responsivo para celular vertical */
         @media (max-width: 480px) {
             header {
-                font-size: 24px;
+                font-size: 22px;
             }
             .menu-btn {
                 font-size: 20px;
-                padding: 5px 8px;
-            }
-            .sidebar {
-                width: 0;
-                transition: 0.3s;
             }
             .sidebar.open {
                 width: 100%;
-                box-shadow: none;
-                padding-top: 40px;
-            }
-            .sidebar h2 {
-                font-size: 16px;
-            }
-            .sidebar p, .sidebar a {
-                font-size: 12px;
-            }
-            .sidebar iframe {
-                height: 140px;
             }
             .card {
                 max-width: 90%;
-                padding: 12px;
-            }
-            .card h2 {
-                font-size: 18px;
-            }
-            .card p {
-                font-size: 12px;
-            }
-            .btn {
-                font-size: 14px;
-                padding: 10px 14px;
             }
         }
-
     </style>
 </head>
 <body>
 
 <header>BATALHA DO NÚCLEO</header>
 
-<!-- Botão de menu -->
+<!-- PATROCÍNIO -->
+<div class="patrocinio">
+    <img src="patrocinio.png" alt="Patrocínio">
+    <p>PATROCINADOR</p>
+</div>
+
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<!-- Sidebar deslizante -->
 <div id="mySidebar" class="sidebar">
     <div class="close-btn" onclick="closeMenu()">×</div>
+
     <div class="sidebar-content">
 
         <h2>📍 Local</h2>
@@ -271,11 +228,9 @@
         <h2>⏰ Dia & Horário</h2>
         <p>Toda quinta-feira às 18:00</p>
 
-        <h2>🎤 Curiosidades</h2>
-        <p>🔥 As batalhas começaram nas ruas como protesto e expressão.</p>
-        <p>🎤 Muitos MCs famosos começaram em batalhas de bairro.</p>
-        <p>🏆 Criatividade &gt; agressividade. A rima é a arma.</p>
-        <p>👊 As regras mudam conforme a cultura da região.</p>
+        <!-- NOVA OPÇÃO: BIBLIOTECA -->
+        <h2>📚 Biblioteca</h2>
+        <a href="#">Abrir Biblioteca</a>
 
         <h2>🏆 Rank de MCs</h2>
         <a href="#">Ver Rank de MCs</a>
@@ -287,31 +242,26 @@
     </div>
 </div>
 
-<!-- Conteúdo principal -->
 <div class="main">
     <div class="card">
         <h2>📲 Inscrições</h2>
         <p>Clique no botão abaixo para se inscrever pelo WhatsApp!</p>
 
         <a class="btn"
-           href="https://chat.whatsapp.com/FaRGsrjJZlbIPEOsB0Zjlm"
+           href="https://wa.me/558194237249?text=Quero%20batalhar!"
            target="_blank">
            INSCREVER AGORA
         </a>
 
-        <!-- Aviso de inscrição gratuita -->
-        <p style="margin-top:8px; font-size:12px; color:#ffcc00; text-shadow: 0 0 4px black; font-family:'Rock Salt', cursive;">
+        <p style="margin-top:8px; font-size:12px; color:#ffcc00; font-weight:bold;">
             ⚡ A inscrição é totalmente gratuita!
         </p>
     </div>
 </div>
 
-<footer>Feito para a comunidade — Batalha do Núcleo - Steh & Kapu</footer>
+<footer>Feito para a comunidade — Batalha do Núcleo / MangueBoyz - Steh & Kapu</footer>
 
 <script>
-    function openMenu() {
-        document.getElementById("mySidebar").style.width = "280px";
-    }
     function closeMenu() {
         document.getElementById("mySidebar").style.width = "0";
         document.getElementById("mySidebar").classList.remove('open');
@@ -319,14 +269,16 @@
 
     function toggleMenu() {
         const sidebar = document.getElementById("mySidebar");
+
         if (window.innerWidth <= 480) {
             sidebar.classList.toggle('open');
+            return;
+        }
+
+        if (sidebar.style.width === "280px") {
+            sidebar.style.width = "0";
         } else {
-            if(sidebar.style.width === "280px") {
-                sidebar.style.width = "0";
-            } else {
-                sidebar.style.width = "280px";
-            }
+            sidebar.style.width = "280px";
         }
     }
 </script>
