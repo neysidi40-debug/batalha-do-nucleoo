@@ -33,10 +33,17 @@
             position: relative;
         }
 
-        /* IMAGEM DO PATROCÍNIO */
+        /* Removido o nome do header */
+        header {
+            visibility: hidden;
+            height: 0;
+            margin: 0;
+            padding: 0;
+        }
+
         .patrocinio {
             text-align: center;
-            margin-top: 5px;
+            margin-top: 25px;
         }
 
         .patrocinio img {
@@ -44,14 +51,11 @@
             max-width: 85%;
         }
 
+        /* Removido o texto PATROCINADOR */
         .patrocinio p {
-            margin-top: 4px;
-            font-size: 14px;
-            font-weight: bold;
-            opacity: 0.9;
+            display: none;
         }
 
-        /* Botão do menu */
         .menu-btn {
             font-size: 22px;
             cursor: pointer;
@@ -69,7 +73,6 @@
             background: rgba(255,255,255,0.15);
         }
 
-        /* Sidebar */
         .sidebar {
             height: 100%;
             width: 0;
@@ -137,7 +140,6 @@
             color: #ffcc00;
         }
 
-        /* Conteúdo principal */
         .main {
             display: flex;
             justify-content: center;
@@ -161,11 +163,10 @@
             font-size: 14px;
         }
 
-        /* BOTÃO VERDE */
         .btn {
             display: inline-block;
             margin-top: 10px;
-            background: #00c246; 
+            background: #00c246;
             color: white;
             padding: 12px 18px;
             border-radius: 5px;
@@ -207,12 +208,8 @@
 </head>
 <body>
 
-<header>BATALHA DO NÚCLEO</header>
-
-<!-- PATROCÍNIO -->
 <div class="patrocinio">
-    <img src="patrocinio.png" alt="Patrocínio">
-    <p>PATROCINADOR</p>
+    <img src="patrocinio.png" alt="Patrocinador">
 </div>
 
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
@@ -228,16 +225,15 @@
         <h2>⏰ Dia & Horário</h2>
         <p>Toda quinta-feira às 18:00</p>
 
-        <!-- NOVA OPÇÃO: BIBLIOTECA -->
         <h2>📚 Biblioteca</h2>
-        <a href="#">Abrir Biblioteca</a>
+        <a href="biblioteca.html">Abrir Biblioteca</a>
 
         <h2>🏆 Rank de MCs</h2>
-        <a href="#">Ver Rank de MCs</a>
+        <a href="rank.html">Ver Rank de MCs</a>
 
         <h2>📍 Localização</h2>
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.7307001526824!2d-34.9320465!3d-7.923172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab170077a0d0f9%3A0x8868397509e33580!2zUHJhw6dhIElJIC0gQ2FldMOpcyAx!5e0!3m2!1spt-BR!2sbr!4v1763388117642!5m2!1spt-BR!2sbr"
-            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            loading="lazy"></iframe>
 
     </div>
 </div>
@@ -275,11 +271,7 @@
             return;
         }
 
-        if (sidebar.style.width === "280px") {
-            sidebar.style.width = "0";
-        } else {
-            sidebar.style.width = "280px";
-        }
+        sidebar.style.width = sidebar.style.width === "280px" ? "0" : "280px";
     }
 </script>
 
