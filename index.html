@@ -24,36 +24,14 @@
         }
 
         header {
-            padding: 20px 10px;
             text-align: center;
-            font-size: 28px;
-            letter-spacing: 1px;
-            color: white;
-            font-weight: bold;
-            position: relative;
+            margin-top: 20px;
         }
 
-        /* Removido o nome do header */
-        header {
-            visibility: hidden;
-            height: 0;
-            margin: 0;
-            padding: 0;
-        }
-
-        .patrocinio {
-            text-align: center;
-            margin-top: 25px;
-        }
-
-        .patrocinio img {
-            width: 180px;
-            max-width: 85%;
-        }
-
-        /* Removido o texto PATROCINADOR */
-        .patrocinio p {
-            display: none;
+        header img {
+            width: 160px;
+            height: auto;
+            opacity: 1;
         }
 
         .menu-btn {
@@ -181,9 +159,21 @@
             background: #009b39;
         }
 
+        /* logo do patrocinador no final */
+        .patrocinio-bottom {
+            text-align: center;
+            margin-top: 45px;
+            margin-bottom: 20px;
+        }
+
+        .patrocinio-bottom img {
+            width: 85px;
+            opacity: 0.92;
+        }
+
         footer {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 10px;
             padding: 10px;
             font-size: 12px;
             color: #fff;
@@ -191,9 +181,6 @@
         }
 
         @media (max-width: 480px) {
-            header {
-                font-size: 22px;
-            }
             .menu-btn {
                 font-size: 20px;
             }
@@ -208,9 +195,9 @@
 </head>
 <body>
 
-<div class="patrocinio">
-    <img src="patrocinio.png" alt="Patrocinador">
-</div>
+<header>
+    <img src="batalha.png" alt="Logo Batalha">
+</header>
 
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
@@ -253,6 +240,11 @@
             ⚡ A inscrição é totalmente gratuita!
         </p>
     </div>
+</div>
+
+<!-- LOGO DO PATROCINADOR NO FINAL DA PÁGINA -->
+<div class="patrocinio-bottom">
+    <img src="patrocinio.png" alt="Patrocinador">
 </div>
 
 <footer>Feito para a comunidade — Batalha do Núcleo / MangueBoyz - Steh & Kapu</footer>
