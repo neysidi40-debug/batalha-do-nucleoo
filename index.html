@@ -1,19 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batalha do Núcleo</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Comunidade</title>
 
     <style>
+        /* ------ TELA DE LOADING ------ */
+        #loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 55px;
+            height: 55px;
+            border: 6px solid rgba(255,255,255,0.18);
+            border-top: 6px solid #ffcc00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 14px;
+            font-size: 16px;
+            color: #fff;
+            letter-spacing: .2px;
+            animation: pulse 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.6; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(-4px); }
+        }
+
+        /* state when hiding - only changes opacity/visibility,
+           actual removal (display:none) applied in JS after transition */
+        #loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* ------ EFEITO FADE IN NA PÁGINA ------ */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: url('batalha.png') no-repeat center center fixed;
+            background: url('fundo.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
+            animation: pageFade 0.9s ease;
         }
 
+        @keyframes pageFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ESCURECER FUNDO */
         body::before {
             content: "";
             position: fixed;
@@ -23,48 +81,69 @@
             z-index: -1;
         }
 
+        /* ---- TOPO ---- */
         header {
             text-align: center;
             margin-top: 20px;
+            animation: zoomTopo 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes zoomTopo {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
         }
 
         header img {
             width: 160px;
             height: auto;
-            opacity: 1;
+            display: inline-block;
         }
 
-        /* BOTÃO MENU ESQUERDO */
-        .menu-btn {
+        /* BOTÕES DE MENU */
+        .menu-btn, .menu-btn-right {
             font-size: 22px;
             cursor: pointer;
             position: fixed;
             top: 10px;
-            left: 10px;
-            z-index: 1001;
+            z-index: 1500; /* abaixo do loading (2000) */
             color: white;
             background: rgba(0,0,0,0.6);
             padding: 6px 10px;
             border-radius: 5px;
+            transition: 0.18s ease;
+            user-select: none;
         }
 
-        .menu-btn:hover {
-            background: rgba(255,255,255,0.15);
+        .menu-btn { left: 10px; }
+        .menu-btn-right { right: 10px; }
+
+        .menu-btn:hover, .menu-btn-right:hover {
+            background: rgba(255,255,255,0.12);
         }
 
-        /* MENU ESQUERDO */
-        .sidebar {
+        /* MENUS (SIDEbars) */
+        .sidebar, .sidebar-right {
             height: 100%;
             width: 0;
             position: fixed;
-            z-index: 1000;
+            z-index: 1600;
             top: 0;
-            left: 0;
-            background-color: rgba(0,0,0,0.95);
+            background-color: rgba(0,0,0,0.96);
             overflow-x: hidden;
-            transition: 0.4s;
+            transition: width 0.35s ease;
             padding-top: 40px;
             color: #fff;
+        }
+
+        .sidebar { left: 0; }
+        .sidebar-right { right: 0; }
+
+        .sidebar.open { width: 280px; }
+        .sidebar-right.open { width: 280px; }
+
+        /* For mobile, full width when open */
+        @media (max-width: 480px) {
+            .sidebar.open, .sidebar-right.open { width: 100%; }
         }
 
         .sidebar-content {
@@ -73,294 +152,258 @@
             padding-bottom: 10px;
         }
 
-        .sidebar h2, .sidebar p, .sidebar a {
-            padding: 6px 20px;
+        .sidebar h2, .sidebar p, .sidebar a,
+        .sidebar-right h2, .sidebar-right a {
+            padding: 8px 20px;
         }
 
-        .sidebar h2 {
-            font-size: 18px;
-            font-weight: bold;
-        }
+        .sidebar h2 { font-size: 18px; font-weight: bold; }
+        .sidebar p { font-size: 14px; }
 
-        .sidebar p {
-            font-size: 14px;
-        }
-
-        .sidebar a {
+        .sidebar a, .sidebar-right a {
             font-size: 16px;
             color: #fff;
             text-decoration: none;
             display: block;
             margin-bottom: 6px;
+            transition: color .18s ease;
         }
 
-        .sidebar a:hover {
-            color: #ffcc00;
-        }
+        .sidebar a:hover, .sidebar-right a:hover { color: #ffcc00; }
 
         .sidebar iframe {
             width: 90%;
             height: 150px;
             border: 0;
-            border-radius: 10px;
+            border-radius: 8px;
             margin: 10px auto;
             display: block;
         }
 
-        .close-btn {
+        .close-btn, .close-btn-right {
             position: absolute;
-            top: 10px;
-            right: 15px;
             font-size: 28px;
             cursor: pointer;
             color: white;
+            transition: color .15s ease;
+            user-select: none;
         }
 
-        .close-btn:hover {
-            color: #ffcc00;
-        }
+        .close-btn { right: 15px; top: 10px; }
+        .close-btn-right { left: 15px; top: 10px; }
 
-        /* BOTÃO DO MENU DIREITO */
-        .menu-btn-right {
-            font-size: 22px;
-            cursor: pointer;
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1001;
-            color: white;
-            background: rgba(0,0,0,0.6);
-            padding: 6px 10px;
-            border-radius: 5px;
-        }
-
-        .menu-btn-right:hover {
-            background: rgba(255,255,255,0.15);
-        }
-
-        /* MENU DIREITO */
-        .sidebar-right {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1000;
-            top: 0;
-            right: 0;
-            background-color: rgba(0,0,0,0.95);
-            overflow-x: hidden;
-            transition: 0.4s;
-            padding-top: 40px;
-            color: #fff;
-        }
-
-        .sidebar-right h2,
-        .sidebar-right a {
-            padding: 6px 20px;
-        }
-
-        .sidebar-right a {
-            font-size: 16px;
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .sidebar-right a:hover {
-            color: #ffcc00;
-        }
-
-        .close-btn-right {
-            position: absolute;
-            top: 10px;
-            left: 15px;
-            font-size: 28px;
-            cursor: pointer;
-            color: white;
-        }
-
-        .close-btn-right:hover {
-            color: #ffcc00;
-        }
+        .close-btn:hover, .close-btn-right:hover { color: #ffcc00; }
 
         /* CARD PRINCIPAL */
         .main {
             display: flex;
             justify-content: center;
-            padding: 10px;
+            padding: 12px;
         }
 
         .card {
-            background: rgba(0,0,0,0.7);
-            border: 2px solid white;
-            padding: 15px;
-            border-radius: 10px;
+            background: rgba(0,0,0,0.62);
+            border: 1px solid rgba(255,255,255,0.45);
+            padding: 16px;
+            border-radius: 12px;
             max-width: 380px;
             text-align: center;
+            backdrop-filter: blur(4px);
+            animation: subir 0.9s ease;
         }
 
-        .card h2 {
-            font-size: 20px;
+        @keyframes subir {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .card p {
-            font-size: 14px;
-        }
+        .card h2 { font-size: 20px; margin: 0 0 8px 0; }
+        .card p { font-size: 14px; margin: 0 0 10px 0; }
 
         .btn {
-            display: inline-block;
-            margin-top: 10px;
             background: #00c246;
-            color: white;
             padding: 12px 18px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
+            border-radius: 6px;
+            color: #fff;
             text-decoration: none;
-            transition: 0.2s;
             border: 1px solid #008f33;
+            transition: transform 0.18s ease, background 0.18s ease;
+            display: inline-block;
+            margin-top: 8px;
+            font-weight: 700;
         }
 
         .btn:hover {
-            background: #009b39;
+            background: #00e154;
+            transform: scale(1.04);
         }
 
         .patrocinio-bottom {
             text-align: center;
-            margin-top: 45px;
+            margin-top: 36px;
             margin-bottom: 20px;
+            animation: pageFade 0.8s ease;
         }
 
-        .patrocinio-bottom img {
-            width: 85px;
-            opacity: 0.92;
-        }
+        .patrocinio-bottom img { width: 85px; opacity: 0.95; border-radius: 6px; }
 
         footer {
             text-align: center;
             margin-top: 10px;
             padding: 10px;
             font-size: 12px;
-            color: #fff;
-            font-weight: bold;
+            opacity: 0.85;
         }
 
-        @media (max-width: 480px) {
-            .menu-btn {
-                font-size: 20px;
-            }
-
-            .sidebar.open,
-            .sidebar-right.open {
-                width: 100%;
-            }
-
-            .card {
-                max-width: 90%;
-            }
+        /* small tweaks for mobile */
+        @media (max-width: 420px) {
+            header img { width: 130px; }
+            .card { padding: 14px; }
+            .btn { padding: 10px 14px; font-size: 15px; }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <img src="batalha.png" alt="Logo Batalha">
-</header>
-
-<!-- MENU ESQUERDO -->
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
-
-<!-- MENU DIREITO -->
-<div class="menu-btn-right" onclick="toggleMenuRight()">☰</div>
-
-<!-- SIDEBAR ESQUERDO -->
-<div id="mySidebar" class="sidebar">
-    <div class="close-btn" onclick="closeMenu()">×</div>
-
-    <div class="sidebar-content">
-
-        <h2>📍 Local</h2>
-        <p>PRAÇA DO TERMINAL - CAETÉS 1</p>
-
-        <h2>⏰ Dia & Horário</h2>
-        <p>Toda quinta-feira às 18:00</p>
-
-        <h2>📚 Biblioteca</h2>
-        <a href="biblioteca.html">Abrir Biblioteca</a>
-
-        <h2>🏆 Rank de MCs</h2>
-        <a href="rank.html">Ver Rank de MCs</a>
-
-        <h2>📍 Localização</h2>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.7307001526824!2d-34.9320465!3d-7.923172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab170077a0d0f9%3A0x8868397509e33580!2zUHJhw6dhIElJIC0gQ2FldMOpcyAx!5e0!3m2!1spt-BR!2sbr!4v1763388117642!5m2!1spt-BR!2sbr"
-            loading="lazy"></iframe>
-
+    <!-- TELA DE LOADING -->
+    <div id="loading" aria-hidden="false">
+        <div class="spinner" role="img" aria-label="Carregando"></div>
+        <div class="loading-text">Carregando...</div>
     </div>
-</div>
 
-<!-- SIDEBAR DIREITO -->
-<div id="rightSidebar" class="sidebar-right">
-    <div class="close-btn-right" onclick="closeMenuRight()">×</div>
+    <!-- HEADER -->
+    <header>
+        <img src="batalha.png" alt="Logo">
+    </header>
 
-    <h2>👥 Comunidade</h2>
-    <a href="mcs.html">Veja um pouco do nosso trabalho</a>
-</div>
+    <!-- MENU BOTÕES -->
+    <div class="menu-btn" onclick="toggleMenu()" aria-hidden="false">☰</div>
+    <div class="menu-btn-right" onclick="toggleMenuRight()" aria-hidden="false">☰</div>
 
-<div class="main">
-    <div class="card">
-        <h2>📲 Inscrições</h2>
-        <p>Clique no botão abaixo para se inscrever pelo WhatsApp!</p>
+    <!-- SIDEBAR ESQUERDO -->
+    <div id="mySidebar" class="sidebar" aria-hidden="true">
+        <div class="close-btn" onclick="closeMenu()">×</div>
+        <div class="sidebar-content">
+            <h2>📍 Local</h2>
+            <p>PRAÇA DO TERMINAL - CAETÉS 1</p>
 
-        <a class="btn"
-           href="https://wa.me/558194237249?text=Quero%20batalhar!"
-           target="_blank">
-           INSCREVER AGORA
-        </a>
+            <h2>⏰ Dia & Horário</h2>
+            <p>Toda quinta-feira às 18:00</p>
 
-        <p style="margin-top:8px; font-size:12px; color:#ffcc00; font-weight:bold;">
-            ⚡ A inscrição é totalmente gratuita!
-        </p>
+            <h2>📚 Biblioteca</h2>
+            <a href="biblioteca.html">Abrir Biblioteca</a>
+
+            <h2>🏆 Rank de MCs</h2>
+            <a href="rank.html">Ver Rank de MCs</a>
+
+            <h2>📍 Localização</h2>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.7307001526824!2d-34.9320465!3d-7.923172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab170077a0d0f9%3A0x8868397509e33580!2zUHJhw6dhIElJIC0gQ2FldMOpcyAx!5e0!3m2!1spt-BR!2sbr!4v1763388117642!5m2!1spt-BR!2sbr"
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
     </div>
-</div>
 
-<div class="patrocinio-bottom">
-    <img src="patrocinio.png" alt="Patrocinador">
-</div>
+    <!-- SIDEBAR DIREITO -->
+    <div id="rightSidebar" class="sidebar-right" aria-hidden="true">
+        <div class="close-btn-right" onclick="closeMenuRight()">×</div>
+        <h2 style="padding: 8px 20px;">👥 Comunidade</h2>
+        <a href="mcs.html" style="padding: 8px 20px; display:block;">Veja um pouco do nosso trabalho</a>
+    </div>
 
-<footer>Feito para a comunidade — Batalha do Núcleo / MangueBoyz - Steh & Kapu</footer>
+    <!-- CONTEÚDO -->
+    <div class="main">
+        <div class="card" role="main" aria-live="polite">
+            <h2>📲 Inscrições</h2>
+            <p>Clique no botão abaixo para se inscrever pelo WhatsApp!</p>
+
+            <a class="btn" href="https://wa.me/558194237249?text=Quero%20batalhar!" target="_blank" rel="noopener noreferrer">
+                INSCREVER AGORA
+            </a>
+
+            <p style="margin-top:8px; font-size:12px; color:#ffcc00; font-weight:bold;">
+                ⚡ A inscrição é totalmente gratuita!
+            </p>
+        </div>
+    </div>
+
+    <div class="patrocinio-bottom">
+        <img src="patrocinio.png" alt="Patrocinador">
+    </div>
+
+    <footer>
+        Feito para a comunidade — MangueBoyz - Steh & Kapu
+    </footer>
 
 <script>
-    function closeMenu() {
-        document.getElementById("mySidebar").style.width = "0";
-        document.getElementById("mySidebar").classList.remove('open');
-    }
+    /* ------------- LOADING ------------- 
+       Strategy:
+         - Hide loading when window 'load' fires (all resources loaded)
+         - Fallback: ensure hide after max 2500ms so it never stays forever
+         - After applying hidden class (fade), set display:none to fully remove
+    */
+    (function() {
+        const loading = document.getElementById('loading');
+        let hidden = false;
 
-    function toggleMenu() {
-        const sidebar = document.getElementById("mySidebar");
-
-        if (window.innerWidth <= 480) {
-            sidebar.classList.toggle('open');
-            return;
+        function hideLoading() {
+            if (!loading || hidden) return;
+            hidden = true;
+            loading.classList.add('hidden');
+            // after transition ends (matching CSS transition time), remove element
+            setTimeout(() => {
+                if (loading && loading.parentNode) loading.style.display = 'none';
+            }, 650); // slightly longer than CSS transition (0.6s)
         }
 
-        sidebar.style.width = sidebar.style.width === "280px" ? "0" : "280px";
+        // When whole page loaded (images, iframes, etc.)
+        window.addEventListener('load', hideLoading);
+
+        // Fallback: in case 'load' doesn't fire quickly (or dev/testing), hide after 2.5s
+        setTimeout(hideLoading, 2500);
+
+        // Also allow early click to remove loading for dev (optional)
+        loading.addEventListener('click', hideLoading);
+    })();
+
+
+    /* ------------- SIDEBAR CONTROLS ------------- */
+    function toggleMenu() {
+        const sidebar = document.getElementById('mySidebar');
+        if (!sidebar) return;
+        // desktop behavior: toggle width to 280/0 via class 'open'
+        sidebar.classList.toggle('open');
+        // accessibility attr
+        sidebar.setAttribute('aria-hidden', !sidebar.classList.contains('open'));
     }
 
-    function closeMenuRight() {
-        document.getElementById("rightSidebar").style.width = "0";
-        document.getElementById("rightSidebar").classList.remove('open');
+    function closeMenu() {
+        const sidebar = document.getElementById('mySidebar');
+        if (!sidebar) return;
+        sidebar.classList.remove('open');
+        sidebar.setAttribute('aria-hidden', 'true');
     }
 
     function toggleMenuRight() {
-        const sidebar = document.getElementById("rightSidebar");
-
-        if (window.innerWidth <= 480) {
-            sidebar.classList.toggle('open');
-            return;
-        }
-
-        sidebar.style.width = sidebar.style.width === "280px" ? "0" : "280px";
+        const sidebar = document.getElementById('rightSidebar');
+        if (!sidebar) return;
+        sidebar.classList.toggle('open');
+        sidebar.setAttribute('aria-hidden', !sidebar.classList.contains('open'));
     }
+
+    function closeMenuRight() {
+        const sidebar = document.getElementById('rightSidebar');
+        if (!sidebar) return;
+        sidebar.classList.remove('open');
+        sidebar.setAttribute('aria-hidden', 'true');
+    }
+
+    // Close sidebars when user presses Esc
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeMenu();
+            closeMenuRight();
+        }
+    });
 </script>
 
 </body>
