@@ -1,127 +1,317 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta-name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCs – Comunidade</title>
+<meta charset="UTF-8">
+<meta-name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCs – Comunidade</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b0b0b;
-            color: #fff;
-            padding: 20px;
+<style>
+    /* Corpo do site */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0b0b0b;
+        color: #fff;
+        padding: 20px;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /* Fundo com imagem e partículas */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 110%;
+        height: 110%;
+        background-image: url('fundo-do-site.jpg'); /* imagem principal do fundo */
+        background-size: cover;
+        background-position: center;
+        filter: blur(5px) brightness(0.3);
+        opacity: 0;
+        transition: transform 1s ease, opacity 0.5s ease;
+        transform: scale(1);
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    body:hover::after {
+        opacity: 0.25;
+        transform: scale(1.05);
+    }
+
+    /* Partículas animadas */
+    .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .particle {
+        position: absolute;
+        background: rgba(255,255,255,0.6);
+        border-radius: 50%;
+        width: 4px;
+        height: 4px;
+        animation: float 10s linear infinite;
+    }
+
+    /* animação de subida e fade das partículas */
+    @keyframes float {
+        0% {
+            transform: translateY(100vh) translateX(0) scale(1);
+            opacity: 0;
         }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 24px;
-            color: #ffcc00;
+        10% {
+            opacity: 1;
         }
-
-        .mc-list {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            max-width: 500px;
-            margin: auto;
+        100% {
+            transform: translateY(-10vh) translateX(50px) scale(0.5);
+            opacity: 0;
         }
+    }
 
-        .mc-card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 12px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+    /* Título */
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 28px;
+        color: #ffcc00;
+        text-shadow: 1px 1px 5px #000;
+    }
+
+    /* Lista de MCs */
+    .mc-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    /* Card de cada MC */
+    .mc-card {
+        position: relative;
+        background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+        border-radius: 16px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: appear 0.5s forwards;
+    }
+
+    /* Atraso progressivo nos cards */
+    .mc-card:nth-child(1) { animation-delay: 0.1s; }
+    .mc-card:nth-child(2) { animation-delay: 0.3s; }
+    .mc-card:nth-child(3) { animation-delay: 0.5s; }
+    .mc-card:nth-child(4) { animation-delay: 0.7s; }
+
+    @keyframes appear {
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
+    /* Hover do card */
+    .mc-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 25px #ffcc00, 0 8px 20px rgba(0,0,0,0.6);
+    }
+
+    /* Fundo do artista no card */
+    .mc-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: var(--bg-img);
+        background-size: cover;
+        background-position: center;
+        filter: blur(8px) brightness(0.4);
+        opacity: 0;
+        transition: opacity 0.4s, transform 0.4s;
+        transform: scale(1);
+        z-index: 0;
+    }
+
+    .mc-card:hover::before {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    /* Conteúdo acima do fundo */
+    .mc-card img,
+    .mc-card .mc-info {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Imagem do MC */
+    .mc-card img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
+        border: 3px solid #ffcc00;
+    }
+
+    .mc-info h3 {
+        margin: 5px 0;
+        font-size: 20px;
+        color: #ffcc00;
+    }
+
+    /* Tags de estilo ou cidade */
+    .mc-tag {
+        font-size: 14px;
+        color: #ffdd55;
+        margin: 2px 0;
+    }
+
+    /* Contador de músicas/streams */
+    .mc-stats {
+        font-size: 14px;
+        color: #00c2ff;
+        margin: 2px 0 5px;
+    }
+
+    .mc-info a {
+        color: #00c2ff;
+        text-decoration: none;
+        font-size: 16px;
+        margin: 4px 0;
+        display: inline-block;
+        transition: color 0.2s;
+    }
+
+    .mc-info a:hover {
+        color: #ffcc00;
+        text-decoration: underline;
+    }
+
+    /* Botão voltar */
+    .voltar {
+        display: block;
+        text-align: center;
+        margin: 40px auto 0;
+        padding: 12px 20px;
+        background: #ffcc00;
+        color: #000;
+        border-radius: 12px;
+        font-weight: bold;
+        text-decoration: none;
+        width: 180px;
+        transition: background 0.2s;
+    }
+
+    .voltar:hover {
+        background: #e6b800;
+    }
+
+    @media (max-width: 600px) {
         .mc-card img {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .mc-info {
-            flex: 1;
+            width: 100px;
+            height: 100px;
         }
 
         .mc-info h3 {
-            margin: 0;
             font-size: 18px;
         }
 
-        .mc-info a {
-            color: #00c2ff;
-            text-decoration: none;
+        .mc-info a, .mc-tag, .mc-stats {
             font-size: 14px;
-            display: block;
-            margin-top: 4px;
         }
-
-        .mc-info a:hover {
-            text-decoration: underline;
-        }
-
-        .voltar {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-            padding: 10px 15px;
-            background: #ffcc00;
-            color: #000;
-            border-radius: 8px;
-            font-weight: bold;
-            text-decoration: none;
-            width: 160px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
-    <h1>Artistas da Comunidade</h1>
+<h1>Artistas da Comunidade</h1>
 
-    <div class="mc-list">
+<div class="mc-list">
 
-        <!-- MC 1 -->
-        <div class="mc-card">
-            <img src="steh.png" alt="MC">
-            <div class="mc-info">
-                <h3>STEH</h3>
-                <a href="https://open.spotify.com/track/1CzoSU0DsIGX7IO5eNQ6JY?si=OhPtGCPOSQG_qh8E7XeLhA" target="_blank">🎵 Ouvir Música</a>
-                <a href="https://www.instagram.com/ogsteh_/" target="_blank">📸 Instagram</a>
-            </div>
+    <!-- MC 1 -->
+    <div class="mc-card" style="--bg-img: url('steh.png');">
+        <img src="steh.png" alt="MC">
+        <div class="mc-info">
+            <h3>STEH</h3>
+            <p class="mc-tag">Rap • Recife-PE • </p>
+            <p class="mc-stats">🎵 4 músicas • 14 ouvintes/mês</p>
+            <a href="https://open.spotify.com/track/1CzoSU0DsIGX7IO5eNQ6JY?si=OhPtGCPOSQG_qh8E7XeLhA" target="_blank">🎵 Ouvir Música</a>
+            <a href="https://www.instagram.com/ogsteh_/" target="_blank">📸 Instagram</a>
         </div>
-
-        <!-- MC 2 -->
-        <div class="mc-card">
-            <img src="kapu.jpg" alt="MC">
-            <div class="mc-info">
-                <h3>KAPU</h3>
-                <a href="https://www.youtube.com/watch?v=tE2PCsaiTu0" target="_blank">🎵 Ouvir Música</a>
-                <a href="https://www.instagram.com/sidikaspo/" target="_blank">📸 Instagram</a>
-            </div>
-        </div>
-
-        <!-- MC 3 -->
-        <div class="mc-card">
-            <img src="guedes.jpg" alt="MC">
-            <div class="mc-info">
-                <h3>GUEDES</h3>
-                <a href="https://open.spotify.com/artist/6TLd4RBBKDRIMVeJyA0Nxq?si=Zx3lkUmUQ7mcPSOIDEqkZA" target="_blank">🎵 Ouvir Música</a>
-                <a href="https://www.instagram.com/eoguedess?igsh=ZXAybzg5MnR0ZHVk&utm_source=qr" target="_blank">📸 Instagram</a>
-            </div>
-        </div>
-
     </div>
 
-    <a class="voltar" href="index.html">Voltar</a>
+    <!-- MC 2 -->
+    <div class="mc-card" style="--bg-img: url('kapu.jpg');">
+        <img src="kapu.jpg" alt="MC">
+        <div class="mc-info">
+            <h3>KAPU</h3>
+            <p class="mc-tag">Trap • Recife-PE • </p>
+            <p class="mc-stats">🎵 7 músicas • 74 ouvintes/mês</p>
+            <a href="https://www.youtube.com/watch?v=tE2PCsaiTu0" target="_blank">🎵 Ouvir Música</a>
+            <a href="https://www.instagram.com/sidikaspo/" target="_blank">📸 Instagram</a>
+        </div>
+    </div>
+
+    <!-- MC 3 -->
+    <div class="mc-card" style="--bg-img: url('guedes.jpg');">
+        <img src="guedes.jpg" alt="MC">
+        <div class="mc-info">
+            <h3>GUEDES</h3>
+            <p class="mc-tag">BregaFunk • Recife-PE • 🔥 Em alta</p>
+            <p class="mc-stats">🎵 11 músicas • 64 ouvintes/mês</p>
+            <a href="https://open.spotify.com/artist/6TLd4RBBKDRIMVeJyA0Nxq?si=Zx3lkUmUQ7mcPSOIDEqkZA" target="_blank">🎵 Ouvir Música</a>
+            <a href="https://www.instagram.com/eoguedess?igsh=ZXAybzg5MnR0ZHVk&utm_source=qr" target="_blank">📸 Instagram</a>
+        </div>
+    </div>
+
+    <!-- MC 4 -->
+    <div class="mc-card" style="--bg-img: url('lumi.jpg');">
+        <img src="lumi.jpg" alt="MC">
+        <div class="mc-info">
+            <h3>artista</h3>
+            <p class="mc-tag">Hip Hop • Curitiba • 🔥 Em alta</p>
+            <p class="mc-stats">🎵 0 músicas • 0 ouvintes/mês</p>
+            <a href="https://open.spotify.com/track/EXEMPLODELINK" target="_blank">🎵 Ouvir Música</a>
+            <a href="https://www.instagram.com/lumi_/" target="_blank">📸 Instagram</a>
+        </div>
+    </div>
+
+</div>
+
+<a class="voltar" href="index.html">Voltar</a>
+
+<!-- Partículas -->
+<div class="particles">
+    <!-- 50 partículas -->
+    <div class="particle" style="left:5%; animation-duration:12s; width:3px; height:3px;"></div>
+    <div class="particle" style="left:15%; animation-duration:8s; width:4px; height:4px;"></div>
+    <div class="particle" style="left:25%; animation-duration:10s; width:2px; height:2px;"></div>
+    <div class="particle" style="left:35%; animation-duration:9s; width:3px; height:3px;"></div>
+    <div class="particle" style="left:45%; animation-duration:11s; width:4px; height:4px;"></div>
+    <div class="particle" style="left:55%; animation-duration:12s; width:2px; height:2px;"></div>
+    <div class="particle" style="left:65%; animation-duration:9s; width:3px; height:3px;"></div>
+    <div class="particle" style="left:75%; animation-duration:10s; width:4px; height:4px;"></div>
+    <div class="particle" style="left:85%; animation-duration:8s; width:2px; height:2px;"></div>
+    <div class="particle" style="left:95%; animation-duration:11s; width:3px; height:3px;"></div>
+</div>
 
 </body>
 </html>
