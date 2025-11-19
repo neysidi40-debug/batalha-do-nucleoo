@@ -34,6 +34,7 @@
             opacity: 1;
         }
 
+        /* BOTÃO MENU ESQUERDO */
         .menu-btn {
             font-size: 22px;
             cursor: pointer;
@@ -51,6 +52,7 @@
             background: rgba(255,255,255,0.15);
         }
 
+        /* MENU ESQUERDO */
         .sidebar {
             height: 100%;
             width: 0;
@@ -118,6 +120,70 @@
             color: #ffcc00;
         }
 
+        /* BOTÃO DO MENU DIREITO */
+        .menu-btn-right {
+            font-size: 22px;
+            cursor: pointer;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
+            color: white;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 10px;
+            border-radius: 5px;
+        }
+
+        .menu-btn-right:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* MENU DIREITO */
+        .sidebar-right {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.95);
+            overflow-x: hidden;
+            transition: 0.4s;
+            padding-top: 40px;
+            color: #fff;
+        }
+
+        .sidebar-right h2,
+        .sidebar-right a {
+            padding: 6px 20px;
+        }
+
+        .sidebar-right a {
+            font-size: 16px;
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .sidebar-right a:hover {
+            color: #ffcc00;
+        }
+
+        .close-btn-right {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .close-btn-right:hover {
+            color: #ffcc00;
+        }
+
+        /* CARD PRINCIPAL */
         .main {
             display: flex;
             justify-content: center;
@@ -159,7 +225,6 @@
             background: #009b39;
         }
 
-        /* logo do patrocinador no final */
         .patrocinio-bottom {
             text-align: center;
             margin-top: 45px;
@@ -184,9 +249,12 @@
             .menu-btn {
                 font-size: 20px;
             }
-            .sidebar.open {
+
+            .sidebar.open,
+            .sidebar-right.open {
                 width: 100%;
             }
+
             .card {
                 max-width: 90%;
             }
@@ -199,8 +267,13 @@
     <img src="batalha.png" alt="Logo Batalha">
 </header>
 
+<!-- MENU ESQUERDO -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
+<!-- MENU DIREITO -->
+<div class="menu-btn-right" onclick="toggleMenuRight()">☰</div>
+
+<!-- SIDEBAR ESQUERDO -->
 <div id="mySidebar" class="sidebar">
     <div class="close-btn" onclick="closeMenu()">×</div>
 
@@ -225,6 +298,14 @@
     </div>
 </div>
 
+<!-- SIDEBAR DIREITO -->
+<div id="rightSidebar" class="sidebar-right">
+    <div class="close-btn-right" onclick="closeMenuRight()">×</div>
+
+    <h2>👥 Comunidade</h2>
+    <a href="mcs.html">Veja um pouco do nosso trabalho</a>
+</div>
+
 <div class="main">
     <div class="card">
         <h2>📲 Inscrições</h2>
@@ -242,7 +323,6 @@
     </div>
 </div>
 
-<!-- LOGO DO PATROCINADOR NO FINAL DA PÁGINA -->
 <div class="patrocinio-bottom">
     <img src="patrocinio.png" alt="Patrocinador">
 </div>
@@ -257,6 +337,22 @@
 
     function toggleMenu() {
         const sidebar = document.getElementById("mySidebar");
+
+        if (window.innerWidth <= 480) {
+            sidebar.classList.toggle('open');
+            return;
+        }
+
+        sidebar.style.width = sidebar.style.width === "280px" ? "0" : "280px";
+    }
+
+    function closeMenuRight() {
+        document.getElementById("rightSidebar").style.width = "0";
+        document.getElementById("rightSidebar").classList.remove('open');
+    }
+
+    function toggleMenuRight() {
+        const sidebar = document.getElementById("rightSidebar");
 
         if (window.innerWidth <= 480) {
             sidebar.classList.toggle('open');
