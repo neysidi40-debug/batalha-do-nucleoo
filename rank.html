@@ -37,6 +37,17 @@
         margin-top: 0;
     }
 
+    /* Painel no topo */
+    .painel {
+        margin-bottom: 20px;
+        padding: 12px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.2);
+        font-size: 14px;
+        line-height: 20px;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
@@ -53,6 +64,26 @@
         background: rgba(255,255,255,0.15);
     }
 
+    /* Estilos do Top 3 */
+    .ouro {
+        color: #ffd700;
+        font-weight: bold;
+        text-shadow: 0px 0px 8px #ffd70080;
+    }
+
+    .prata {
+        color: #c0c0c0;
+        font-weight: bold;
+        text-shadow: 0px 0px 8px #c0c0c080;
+    }
+
+    .bronze {
+        color: #cd7f32;
+        font-weight: bold;
+        text-shadow: 0px 0px 6px #cd7f3280;
+    }
+
+    /* Botão voltar */
     .btn-voltar {
         display: inline-block;
         margin-top: 20px;
@@ -70,6 +101,11 @@
 <div class="container">
     <h1>🏆 Ranking de MCs</h1>
 
+    <!-- Painel Topo -->
+    <div id="painel" class="painel">
+        Carregando dados...
+    </div>
+
     <table id="rankTable">
         <tr>
             <th>Posição</th>
@@ -82,24 +118,42 @@
 </div>
 
 <script>
-    // LISTA SIMPLES DE MCs
+    // LISTA DE MCs
     const mcs = [
-        { nome: "ALPHA", pontos: 0 },
-        { nome: "ALT", pontos: 0 },
-        { nome: "BOB", pontos: 0 },
-        { nome: "DAVI", pontos: 0 },
-        { nome: "STEH", pontos: 0 }
+        { nome: "ALPHA", pontos: 20 },
+        { nome: "ALT", pontos: 45 },
+        { nome: "BOB", pontos: 10 },
+        { nome: "DAVI", pontos: 37 },
+        { nome: "STEH", pontos: 60 }
     ];
 
     // Ordena automaticamente os MCs por pontuação
     const ordenado = mcs.sort((a, b) => b.pontos - a.pontos);
 
     const tabela = document.getElementById("rankTable");
+    const painel = document.getElementById("painel");
 
+    // Preencher painel do topo
+    const lider = ordenado[0].nome;
+    const total = mcs.length;
+
+    painel.innerHTML = `
+        🥇 <b>Líder:</b> ${lider}<br>
+        🔥 <b>MC Pegando Fogo:</b> (ALPHA)<br>
+        👥 <b>Total de MCs:</b> ${11}
+    `;
+
+    // Preencher tabela
     let posicao = 1;
     ordenado.forEach(mc => {
+        let classe = "";
+
+        if (posicao === 1) classe = "ouro";
+        if (posicao === 2) classe = "prata";
+        if (posicao === 3) classe = "bronze";
+
         tabela.innerHTML += `
-            <tr>
+            <tr class="${classe}">
                 <td>${posicao}º</td>
                 <td>${mc.nome}</td>
                 <td>${mc.pontos}</td>
@@ -111,4 +165,3 @@
 
 </body>
 </html>
-
