@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta-name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCs – Comunidade</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0b0b;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+            color: #ffcc00;
+        }
+
+        .mc-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .mc-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mc-card img {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .mc-info {
+            flex: 1;
+        }
+
+        .mc-info h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .mc-info a {
+            color: #00c2ff;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .mc-info a:hover {
+            text-decoration: underline;
+        }
+
+        .voltar {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px 15px;
+            background: #ffcc00;
+            color: #000;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            width: 160px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Artistas da Comunidade</h1>
+
+    <div class="mc-list">
+
+        <!-- MC 1 -->
+        <div class="mc-card">
+            <img src="steh.png" alt="MC">
+            <div class="mc-info">
+                <h3>STEH</h3>
+                <a href="https://open.spotify.com/track/1CzoSU0DsIGX7IO5eNQ6JY?si=OhPtGCPOSQG_qh8E7XeLhA" target="_blank">🎵 Ouvir Música</a>
+                <a href="https://www.instagram.com/ogsteh_/" target="_blank">📸 Instagram</a>
+            </div>
+        </div>
+
+        <!-- MC 2 -->
+        <div class="mc-card">
+            <img src="kapu.jpg" alt="MC">
+            <div class="mc-info">
+                <h3>KAPU</h3>
+                <a href="https://www.youtube.com/watch?v=tE2PCsaiTu0" target="_blank">🎵 Ouvir Música</a>
+                <a href="https://www.instagram.com/sidikaspo/" target="_blank">📸 Instagram</a>
+            </div>
+        </div>
+
+        <!-- Copie esse bloco para adicionar mais MCs -->
+        <!--
+        <div class="mc-card">
+            <img src="FOTO.jpg" alt="MC">
+            <div class="mc-info">
+                <h3>NOME</h3>
+                <a href="LINK_MUSICA" target="_blank">🎵 Ouvir Música</a>
+                <a href="LINK_INSTAGRAM" target="_blank">📸 Instagram</a>
+            </div>
+        </div>
+        -->
+
+    </div>
+
+    <a class="voltar" href="index.html">Voltar</a>
+
+</body>
+</html>
