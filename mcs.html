@@ -16,33 +16,34 @@
 
         h1 {
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 24px;
+            margin-bottom: 30px;
+            font-size: 30px;
+            font-weight: bold;
             color: #ffcc00;
         }
 
         .mc-list {
             display: flex;
             flex-direction: column;
-            gap: 18px;
-            max-width: 500px;
+            gap: 25px;
+            max-width: 600px;
             margin: auto;
         }
 
         .mc-card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 12px;
-            border-radius: 12px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 18px;
+            border-radius: 18px;
             display: flex;
+            gap: 18px;
             align-items: center;
-            gap: 12px;
         }
 
         .mc-card img {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
             object-fit: cover;
         }
 
@@ -52,15 +53,17 @@
 
         .mc-info h3 {
             margin: 0;
-            font-size: 18px;
+            font-size: 22px;
+            font-weight: bold;
         }
 
         .mc-info a {
             color: #00c2ff;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 18px;
+            font-weight: bold;
             display: block;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         .mc-info a:hover {
@@ -70,16 +73,37 @@
         .voltar {
             display: block;
             text-align: center;
-            margin-top: 30px;
-            padding: 10px 15px;
+            margin-top: 40px;
+            padding: 15px 20px;
             background: #ffcc00;
             color: #000;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
+            font-size: 20px;
             text-decoration: none;
-            width: 160px;
+            width: 200px;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        /* Ajuste extra para celulares */
+        @media (max-width: 480px) {
+            .mc-card {
+                padding: 20px;
+            }
+
+            .mc-card img {
+                width: 90px;
+                height: 90px;
+            }
+
+            .mc-info h3 {
+                font-size: 24px;
+            }
+
+            .mc-info a {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -108,18 +132,6 @@
                 <a href="https://www.instagram.com/sidikaspo/" target="_blank">📸 Instagram</a>
             </div>
         </div>
-
-        <!-- Copie esse bloco para adicionar mais MCs -->
-        <!--
-        <div class="mc-card">
-            <img src="FOTO.jpg" alt="MC">
-            <div class="mc-info">
-                <h3>NOME</h3>
-                <a href="LINK_MUSICA" target="_blank">🎵 Ouvir Música</a>
-                <a href="LINK_INSTAGRAM" target="_blank">📸 Instagram</a>
-            </div>
-        </div>
-        -->
 
     </div>
 
