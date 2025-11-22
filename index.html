@@ -48,8 +48,7 @@
             to { opacity: 1; transform: translateY(-4px); }
         }
 
-        /* state when hiding - only changes opacity/visibility,
-           actual removal (display:none) applied in JS after transition */
+        /* state when hiding - only changes opacity/visibility */
         #loading.hidden {
             opacity: 0;
             visibility: hidden;
@@ -105,7 +104,7 @@
             cursor: pointer;
             position: fixed;
             top: 10px;
-            z-index: 1500; /* abaixo do loading (2000) */
+            z-index: 1500;
             color: white;
             background: rgba(0,0,0,0.6);
             padding: 6px 10px;
@@ -121,7 +120,7 @@
             background: rgba(255,255,255,0.12);
         }
 
-        /* MENUS (SIDEbars) */
+        /* MENUS */
         .sidebar, .sidebar-right {
             height: 100%;
             width: 0;
@@ -141,7 +140,6 @@
         .sidebar.open { width: 280px; }
         .sidebar-right.open { width: 280px; }
 
-        /* For mobile, full width when open */
         @media (max-width: 480px) {
             .sidebar.open, .sidebar-right.open { width: 100%; }
         }
@@ -255,7 +253,7 @@
             opacity: 0.85;
         }
 
-        /* small tweaks for mobile */
+        /* mobile */
         @media (max-width: 420px) {
             header img { width: 130px; }
             .card { padding: 14px; }
@@ -310,7 +308,7 @@
         <a href="mcs.html" style="padding: 8px 20px; display:block;">Veja um pouco do nosso trabalho</a>
     </div>
 
-    <!-- CONTEÚDO -->
+    <!-- CONTEÚDO PRINCIPAL -->
     <div class="main">
         <div class="card" role="main" aria-live="polite">
             <h2>📲 Inscrições</h2>
@@ -326,6 +324,22 @@
         </div>
     </div>
 
+    <!-- ⭐ NOVO CARD DO SORTEIO -->
+    <div class="main">
+        <div class="card" id="sorteioCard" style="margin-top: 20px;">
+            <h2>🎁 Sorteio</h2>
+            <p>Digite os nomes separados por vírgula e clique no botão!</p>
+
+            <input id="nomesInput" type="text" placeholder="ex: Kapu, Steh, João"
+                style="width: 90%; padding: 10px; margin-top: 10px; border-radius: 6px; border: none;">
+
+            <a class="btn" onclick="sortear()">🎲 Sortear</a>
+
+            <p id="resultadoSorteio"
+                style="margin-top: 12px; font-size: 16px; font-weight: bold; color: #ffcc00;"></p>
+        </div>
+    </div>
+
     <div class="patrocinio-bottom">
         <img src="patrocinio.png" alt="Patrocinador">
     </div>
@@ -335,12 +349,7 @@
     </footer>
 
 <script>
-    /* ------------- LOADING ------------- 
-       Strategy:
-         - Hide loading when window 'load' fires (all resources loaded)
-         - Fallback: ensure hide after max 2500ms so it never stays forever
-         - After applying hidden class (fade), set display:none to fully remove
-    */
+    /* ------------- LOADING ------------- */
     (function() {
         const loading = document.getElementById('loading');
         let hidden = false;
@@ -349,61 +358,63 @@
             if (!loading || hidden) return;
             hidden = true;
             loading.classList.add('hidden');
-            // after transition ends (matching CSS transition time), remove element
             setTimeout(() => {
                 if (loading && loading.parentNode) loading.style.display = 'none';
-            }, 650); // slightly longer than CSS transition (0.6s)
+            }, 650);
         }
 
-        // When whole page loaded (images, iframes, etc.)
         window.addEventListener('load', hideLoading);
-
-        // Fallback: in case 'load' doesn't fire quickly (or dev/testing), hide after 2.5s
         setTimeout(hideLoading, 2500);
-
-        // Also allow early click to remove loading for dev (optional)
         loading.addEventListener('click', hideLoading);
     })();
 
-
-    /* ------------- SIDEBAR CONTROLS ------------- */
+    /* ------------- MENUS ------------- */
     function toggleMenu() {
         const sidebar = document.getElementById('mySidebar');
-        if (!sidebar) return;
-        // desktop behavior: toggle width to 280/0 via class 'open'
         sidebar.classList.toggle('open');
-        // accessibility attr
         sidebar.setAttribute('aria-hidden', !sidebar.classList.contains('open'));
     }
 
     function closeMenu() {
         const sidebar = document.getElementById('mySidebar');
-        if (!sidebar) return;
         sidebar.classList.remove('open');
         sidebar.setAttribute('aria-hidden', 'true');
     }
 
     function toggleMenuRight() {
         const sidebar = document.getElementById('rightSidebar');
-        if (!sidebar) return;
         sidebar.classList.toggle('open');
         sidebar.setAttribute('aria-hidden', !sidebar.classList.contains('open'));
     }
 
     function closeMenuRight() {
         const sidebar = document.getElementById('rightSidebar');
-        if (!sidebar) return;
         sidebar.classList.remove('open');
         sidebar.setAttribute('aria-hidden', 'true');
     }
 
-    // Close sidebars when user presses Esc
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeMenu();
             closeMenuRight();
         }
     });
+
+    /* ------------- FUNÇÃO DE SORTEIO ------------- */
+    function sortear() {
+        let nomes = document.getElementById("nomesInput").value;
+
+        if (!nomes.trim()) {
+            document.getElementById("resultadoSorteio").innerText = "Digite pelo menos 1 nome!";
+            return;
+        }
+
+        let lista = nomes.split(",").map(n => n.trim()).filter(n => n.length > 0);
+
+        let vencedor = lista[Math.floor(Math.random() * lista.length)];
+
+        document.getElementById("resultadoSorteio").innerText = "🎉 Vencedor: " + vencedor + "!";
+    }
 </script>
 
 </body>
