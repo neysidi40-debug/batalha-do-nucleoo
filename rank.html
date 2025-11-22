@@ -94,6 +94,25 @@
         font-weight: bold;
         border-radius: 5px;
     }
+
+    /* Foto */
+    .foto-final {
+        margin-top: 25px;
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid #ff6600;
+    }
+
+    /* 🔥 ANIMAÇÃO LEVE PARA "MC PEGANDO FOGO" */
+    .fogo {
+        animation: brilhoFogo 1.8s infinite ease-in-out;
+    }
+
+    @keyframes brilhoFogo {
+        0% { text-shadow: 0 0 4px #ff660080; opacity: 0.9; }
+        50% { text-shadow: 0 0 12px #ff3300cc; opacity: 1; }
+        100% { text-shadow: 0 0 4px #ff660080; opacity: 0.9; }
+    }
 </style>
 </head>
 <body>
@@ -114,32 +133,34 @@
         </tr>
     </table>
 
+    <!-- FOTO DA PRIMEIRA EDIÇÃO -->
+    <img src="1edicao.jpg" alt="Primeira Edição" class="foto-final">
+
     <a class="btn-voltar" href="index.html">⬅ Voltar</a>
 </div>
 
 <script>
     // LISTA DE MCs
     const mcs = [
-        { nome: "ALPHA", pontos: 0 },
-        { nome: "ALT", pontos: 0 },
         { nome: "BOB", pontos: 0 },
-        { nome: "DAVI", pontos: 0 },
-        { nome: "STEH", pontos: 0 }
+        { nome: "MORENO", pontos: 0 },
+        { nome: "KILLA", pontos: 0 },
+        { nome: "TETEU", pontos: 0 },
+        { nome: "ALEMÃO", pontos: 0 }
     ];
 
-    // Ordena automaticamente os MCs por pontuação
+    // Ordena automaticamente
     const ordenado = mcs.sort((a, b) => b.pontos - a.pontos);
 
     const tabela = document.getElementById("rankTable");
     const painel = document.getElementById("painel");
 
-    // Preencher painel do topo
+    // Preencher painel
     const lider = ordenado[0].nome;
-    const total = mcs.length;
 
     painel.innerHTML = `
         🥇 <b>Líder:</b> ${lider}<br>
-        🔥 <b>MC Pegando Fogo:</b> (ALPHA)<br>
+        🔥 <b class="fogo">MC Pegando Fogo: (BOB)</b><br>
         👥 <b>Total de MCs:</b> ${11}
     `;
 
@@ -165,4 +186,3 @@
 
 </body>
 </html>
-
