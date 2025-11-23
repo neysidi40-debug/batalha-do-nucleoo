@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edição 1 – Batalha do Núcleo</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: url('fundo.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(3px);
+        z-index: -1;
+    }
+
+    .edicao-container {
+        padding: 25px;
+        text-align: center;
+        color: white;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        font-size: 26px;
+        font-weight: bold;
+    }
+
+    /* GALERIA COM FOTOS QUADRADAS */
+    .galeria {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 30px;
+        justify-items: center;
+    }
+
+    .galeria img {
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 15px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.6);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .galeria img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 18px rgba(255,255,255,0.4);
+    }
+
+    /* LINKS INSTAGRAM */
+    .links-instagram a {
+        display: block;
+        background: #ff6a00;
+        padding: 14px;
+        margin: 10px 0;
+        border-radius: 15px;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        transition: transform 0.2s, background 0.2s;
+    }
+
+    .links-instagram a:hover {
+        background: #ff8800;
+        transform: scale(1.03);
+    }
+
+    /* SEÇÃO DE VÍDEOS */
+    h3 {
+        margin-top: 35px;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .video-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 22px;
+    }
+
+    .video-container iframe {
+        width: 100%;
+        max-width: 320px; /* VÍDEO REDUZIDO */
+        height: 570px;    /* Ajuste proporcional do Reels */
+        border-radius: 15px;
+        border: none;
+    }
+
+    .btn-voltar {
+        display: block;
+        margin-top: 25px;
+        text-decoration: none;
+        color: #ffd4b0;
+        font-weight: bold;
+        font-size: 16px;
+        transition: 0.2s;
+    }
+
+    .btn-voltar:hover {
+        color: white;
+    }
+</style>
+</head>
+<body>
+
+<div class="edicao-container">
+    <h2>Edição 1 – Praça Caetés</h2>
+
+    <div class="galeria">
+        <img src="1edicao_foto1.png">
+        <img src="1edicao_foto2.png">
+        <img src="1edicao_foto3.png">
+        <img src="1edicao_foto4.jpg">
+    </div>
+
+    <h3>📽️ Vídeos da edição</h3>
+
+    <div class="video-container">
+        <iframe src="https://www.instagram.com/reel/DRXIfikEYbR/embed" allowfullscreen></iframe>
+    </div>
+
+    <div class="video-container">
+        <iframe src="https://www.instagram.com/reel/DRVGI7wkVzV/embed" allowfullscreen></iframe>
+    </div>
+
+    <div class="links-instagram">
+        <a href="https://www.instagram.com/batalhadonucle0/" target="_blank">Instagram Oficial</a>
+        <a href="https://www.instagram.com/leonardo_mendes_tks/" target="_blank">Artista destaque</a>
+    </div>
+
+    <a href="biblioteca.html" class="btn-voltar">Voltar</a>
+</div>
+
+</body>
+</html>
