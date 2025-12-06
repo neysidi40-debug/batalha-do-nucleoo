@@ -9,7 +9,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
-    getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, onSnapshot 
+    getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -80,8 +80,7 @@ function atualizarRanking() {
     mcs.sort((a, b) => b.pontos - a.pontos);
 
     const tabela = document.getElementById("rankTable");
-    tabela.innerHTML = `
-    <tr><th>Posição</th><th>MC</th><th>Pontos</th></tr>`;
+    tabela.innerHTML = `<tr><th>Posição</th><th>MC</th><th>Pontos</th></tr>`;
 
     mcs.forEach((mc, i) => {
         tabela.innerHTML += `
@@ -101,8 +100,7 @@ function atualizarRanking() {
 // Atualiza painel ADM
 function atualizarControle() {
     const tabela = document.getElementById("controleTable");
-    tabela.innerHTML = `
-    <tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>`;
+    tabela.innerHTML = `<tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>`;
 
     mcs.forEach((mc, i) => {
         tabela.innerHTML += `
@@ -120,11 +118,55 @@ function atualizarControle() {
 }
 
 carregarMCs();
-
 </script>
 
 <style>
- /* (todo o seu CSS ORIGINAL aqui, idêntico) */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('fundo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(3px);
+    z-index: -1;
+}
+.container {
+    max-width: 450px;
+    margin: 40px auto;
+    background: rgba(0,0,0,0.65);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid white;
+    text-align: center;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid white;
+}
+table th { background: rgba(255,255,255,0.15); }
+.btn { padding: 6px 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.btn-add { background: #44ddff; color:black; }
+.btn-edit { background: #ffaa00; }
+.btn-del { background: #ff4444; color:white; }
+#painel, #painelMC {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+}
+#adminArea { display: none; }
 </style>
 </head>
 <body>
@@ -145,7 +187,7 @@ carregarMCs();
 
 <button class="btn-add btn" onclick="loginAdmin()">🔐 Login Admin</button>
 
-<div id="adminArea" style="display:none;">
+<div id="adminArea">
 <h2>Gerenciar MCs</h2>
 <table id="controleTable">
  <tr>
