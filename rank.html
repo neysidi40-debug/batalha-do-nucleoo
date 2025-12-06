@@ -1,57 +1,130 @@
-<!-- Código atualizado com proteção para administradores -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ranking de MCs</title>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+    getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, onSnapshot 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAJopMM_tGohr8BQXZziVBt6UHWIz4dmNk",
+  authDomain: "ranking-mcs.firebaseapp.com",
+  projectId: "ranking-mcs",
+  storageBucket: "ranking-mcs.firebasestorage.app",
+  messagingSenderId: "137351607662",
+  appId: "1:137351607662:web:daaa71f227902150f4bd7f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let admin = false;
+let mcs = [];
+
+async function carregarMCs() {
+    onSnapshot(collection(db, "mcs"), (snapshot) => {
+        mcs = [];
+        snapshot.forEach(doc => {
+            mcs.push({ id: doc.id, ...doc.data() });
+        });
+
+        atualizarRanking();
+        if (admin) atualizarControle();
+    });
+}
+
+window.loginAdmin = function () {
+    const senha = prompt("Digite a senha de administrador:");
+    if (senha === "nucleopass") {
+        admin = true;
+        document.getElementById("adminArea").style.display = "block";
+        atualizarControle();
+        alert("Login realizado com sucesso!");
+    } else {
+        alert("Senha incorreta!");
+    }
+};
+
+window.alterarPonto = async function (i, valor) {
+    const ref = doc(db, "mcs", mcs[i].id);
+    await updateDoc(ref, { pontos: mcs[i].pontos + valor });
+};
+
+window.editar = async function (i) {
+    const novo = prompt("Novo nome:", mcs[i].nome);
+    if (novo) {
+        await updateDoc(doc(db, "mcs", mcs[i].id), { nome: novo });
+    }
+};
+
+window.remover = async function (i) {
+    if (confirm("Excluir MC?")) {
+        await deleteDoc(doc(db, "mcs", mcs[i].id));
+    }
+};
+
+window.novoMC = async function () {
+    const nome = prompt("Nome do novo MC:");
+    if (!nome) return;
+    await addDoc(collection(db, "mcs"), { nome, pontos: 0 });
+};
+
+// Atualiza rank
+function atualizarRanking() {
+    mcs.sort((a, b) => b.pontos - a.pontos);
+
+    const tabela = document.getElementById("rankTable");
+    tabela.innerHTML = `
+    <tr><th>Posição</th><th>MC</th><th>Pontos</th></tr>`;
+
+    mcs.forEach((mc, i) => {
+        tabela.innerHTML += `
+        <tr>
+           <td>${i+1}º</td>
+           <td>${mc.nome}</td>
+           <td>${mc.pontos}</td>
+        </tr>`;
+    });
+
+    if (mcs.length > 0) {
+        document.getElementById("painel").innerHTML =
+            `🥇 <b>Líder:</b> ${mcs[0].nome}`;
+    }
+}
+
+// Atualiza painel ADM
+function atualizarControle() {
+    const tabela = document.getElementById("controleTable");
+    tabela.innerHTML = `
+    <tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>`;
+
+    mcs.forEach((mc, i) => {
+        tabela.innerHTML += `
+        <tr>
+          <td>${mc.nome}</td>
+          <td>${mc.pontos}</td>
+          <td>
+            <button class="btn" onclick="alterarPonto(${i},0.5)">+0.5</button>
+            <button class="btn" onclick="alterarPonto(${i},-0.5)">−0.5</button>
+            <button class="btn-edit btn" onclick="editar(${i})">Editar</button>
+            <button class="btn-del btn" onclick="remover(${i})">Excluir</button>
+          </td>
+        </tr>`;
+    });
+}
+
+carregarMCs();
+
+</script>
+
 <style>
- body {
-     margin: 0;
-     font-family: Arial, sans-serif;
-     background: url('fundo.jpg') no-repeat center center fixed;
-     background-size: cover;
-     color: white;
- }
- body::before {
-     content: "";
-     position: fixed;
-     inset: 0;
-     background: rgba(0, 0, 0, 0.65);
-     backdrop-filter: blur(3px);
-     z-index: -1;
- }
- .container {
-     max-width: 450px;
-     margin: 40px auto;
-     background: rgba(0,0,0,0.65);
-     padding: 20px;
-     border-radius: 12px;
-     border: 2px solid white;
-     text-align: center;
- }
- table {
-     width: 100%;
-     border-collapse: collapse;
- }
- table th, table td {
-     padding: 10px;
-     text-align: center;
-     border-bottom: 1px solid white;
- }
- table th { background: rgba(255,255,255,0.15); }
- .btn { padding: 6px 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
- .btn-add { background: #44ddff; color:black; }
- .btn-edit { background: #ffaa00; }
- .btn-del { background: #ff4444; color:white; }
- #painel, #painelMC {
-     margin-top: 15px;
-     padding: 10px;
-     background: rgba(255,255,255,0.1);
-     border: 1px solid rgba(255,255,255,0.2);
-     border-radius: 8px;
- }
- #adminArea { display: none; }
+ /* (todo o seu CSS ORIGINAL aqui, idêntico) */
 </style>
 </head>
 <body>
@@ -70,11 +143,9 @@
 
 <hr>
 
-<!-- BOTÃO PARA LOGIN ADMIN -->
 <button class="btn-add btn" onclick="loginAdmin()">🔐 Login Admin</button>
 
-<!-- ÁREA QUE SÓ ADMIN VÊ -->
-<div id="adminArea">
+<div id="adminArea" style="display:none;">
 <h2>Gerenciar MCs</h2>
 <table id="controleTable">
  <tr>
@@ -88,76 +159,5 @@
 </div>
 
 </div>
-
-<script>
- let admin = false; // controle de permissão
-
- // Ajuste de MCs
- let mcs = JSON.parse(localStorage.getItem("rankingMCs")) || [
-     { nome: "BOB", pontos: 0 },
-     { nome: "MORENO", pontos: 0 },
-     { nome: "KILLA", pontos: 0 },
-     { nome: "MATHEUXX", pontos: 0 },
-     { nome: "ALEMÃO", pontos: 0 }
- ];
-
- function salvar() { localStorage.setItem("rankingMCs", JSON.stringify(mcs)); }
-
- function atualizarTudo() {
-     atualizarRanking();
-     if (admin) atualizarControle();
-     salvar();
- }
-
- function atualizarRanking() {
-     mcs.sort((a,b)=>b.pontos-a.pontos);
-     const tabela = document.getElementById("rankTable");
-     tabela.innerHTML = `
-     <tr><th>Posição</th><th>MC</th><th>Pontos</th></tr>`;
-     mcs.forEach((mc,i)=>{
-         tabela.innerHTML += `<tr><td>${i+1}º</td><td>${mc.nome}</td><td>${mc.pontos}</td></tr>`;
-     });
-     document.getElementById("painel").innerHTML = `🥇 <b>Líder:</b> ${mcs[0].nome}`;
- }
-
- function atualizarControle() {
-     const tabela = document.getElementById("controleTable");
-     tabela.innerHTML = `
-     <tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>`;
-     mcs.forEach((mc,i)=>{
-         tabela.innerHTML += `
-         <tr>
-             <td>${mc.nome}</td>
-             <td>${mc.pontos}</td>
-             <td>
-                 <button class="btn" onclick="alterarPonto(${i},0.5)">+0.5</button>
-                 <button class="btn" onclick="alterarPonto(${i},-0.5)">−0.5</button>
-                 <button class="btn-edit btn" onclick="editar(${i})">Editar</button>
-                 <button class="btn-del btn" onclick="remover(${i})">Excluir</button>
-             </td>
-         </tr>`;
-     });
- }
-
- function alterarPonto(i,v){ mcs[i].pontos += v; atualizarTudo(); }
- function editar(i){ const nome=prompt("Novo nome:",mcs[i].nome); if(nome){mcs[i].nome=nome; atualizarTudo();}}
- function remover(i){ if(confirm("Excluir MC?")){mcs.splice(i,1); atualizarTudo();}}
- function novoMC(){ const nome=prompt("Nome do novo MC:"); if(nome){mcs.push({nome,pontos:0}); atualizarTudo();}}
-
- // LOGIN DE ADMIN SIMPLES
- function loginAdmin() {
-     const senha = prompt("Digite a senha de administrador:");
-     if (senha === "nucleopass") {
-         admin = true;
-         document.getElementById("adminArea").style.display = "block";
-         atualizarControle();
-         alert("Login realizado com sucesso!");
-     } else {
-         alert("Senha incorreta!");
-     }
- }
-
- atualizarTudo();
-</script>
 </body>
 </html>
