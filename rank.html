@@ -1,307 +1,163 @@
+<!-- Código atualizado com proteção para administradores -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ranking de MCs</title>
-
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: url('fundo.jpg') no-repeat center center fixed;
-        background-size: cover;
-        color: white;
-    }
-
-    body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.65);
-        backdrop-filter: blur(3px);
-        z-index: -1;
-    }
-
-    .container {
-        max-width: 450px;
-        margin: 40px auto;
-        background: rgba(0,0,0,0.65);
-        padding: 20px;
-        border-radius: 12px;
-        border: 2px solid white;
-        text-align: center;
-    }
-
-    h1 { margin-top: 0; }
-
-    .painel {
-        margin-bottom: 20px;
-        padding: 12px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.2);
-        font-size: 14px;
-        line-height: 20px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
-
-    table th, table td {
-        padding: 10px;
-        text-align: center;
-        border-bottom: 1px solid white;
-    }
-
-    table th { background: rgba(255,255,255,0.15); }
-
-    .ouro { color: #ffd700; font-weight: bold; text-shadow: 0 0 8px #ffd70080; }
-    .prata { color: #c0c0c0; font-weight: bold; text-shadow: 0 0 8px #c0c0c080; }
-    .bronze { color: #cd7f32; font-weight: bold; text-shadow: 0 0 6px #cd7f3280; }
-
-    .btn-voltar {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 15px;
-        background: #00ff9f;
-        color: black;
-        text-decoration: none;
-        font-weight: bold;
-        border-radius: 5px;
-    }
-
-    .btn-ctrl, .btn-edit, .btn-reset, .btn-add, .btn-remover, #btnTrocarFoto {
-        display: none;
-        cursor: pointer;
-        padding: 6px 10px;
-        margin: 3px;
-        border: none;
-        font-weight: bold;
-        border-radius: 5px;
-        color: black;
-    }
-
-    .btn-ctrl { background: #00ff9f; }
-    .btn-edit { background: #ffaa00; }
-    .btn-reset { background: #ff4444; color: white; }
-    .btn-add { background: #44ddff; }
-    .btn-remover { background: #ff2222; color:white; }
-
-    .logado .btn-ctrl,
-    .logado .btn-edit,
-    .logado .btn-reset,
-    .logado .btn-add,
-    .logado .btn-remover,
-    .logado #uploadFoto,
-    .logado #btnTrocarFoto {
-        display: inline-block;
-    }
-
-    #loginBox {
-        background: rgba(255,255,255,0.15);
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        border: 1px solid white;
-    }
-
-    #fotoVencedor {
-        width: 70%;
-        max-width: 250px;
-        border-radius: 10px;
-        border: 3px solid gold;
-        margin-bottom: 15px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        cursor: pointer;
-    }
+ body {
+     margin: 0;
+     font-family: Arial, sans-serif;
+     background: url('fundo.jpg') no-repeat center center fixed;
+     background-size: cover;
+     color: white;
+ }
+ body::before {
+     content: "";
+     position: fixed;
+     inset: 0;
+     background: rgba(0, 0, 0, 0.65);
+     backdrop-filter: blur(3px);
+     z-index: -1;
+ }
+ .container {
+     max-width: 450px;
+     margin: 40px auto;
+     background: rgba(0,0,0,0.65);
+     padding: 20px;
+     border-radius: 12px;
+     border: 2px solid white;
+     text-align: center;
+ }
+ table {
+     width: 100%;
+     border-collapse: collapse;
+ }
+ table th, table td {
+     padding: 10px;
+     text-align: center;
+     border-bottom: 1px solid white;
+ }
+ table th { background: rgba(255,255,255,0.15); }
+ .btn { padding: 6px 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+ .btn-add { background: #44ddff; color:black; }
+ .btn-edit { background: #ffaa00; }
+ .btn-del { background: #ff4444; color:white; }
+ #painel, #painelMC {
+     margin-top: 15px;
+     padding: 10px;
+     background: rgba(255,255,255,0.1);
+     border: 1px solid rgba(255,255,255,0.2);
+     border-radius: 8px;
+ }
+ #adminArea { display: none; }
 </style>
 </head>
 <body>
-
 <div class="container">
+<h1>🏆 Ranking de MCs</h1>
 
-    <!-- LOGIN -->
-    <div id="loginBox">
-        <h2>Área Restrita</h2>
-        <input type="password" id="senha" placeholder="Digite a senha">
-        <button onclick="entrar()">Entrar</button>
-    </div>
+<div id="painel">Carregando...</div>
 
-    <!-- FOTO DO VENCEDOR -->
-    <img id="fotoVencedor" src="" alt="MC Vencedor" onclick="clicarFoto()">
+<table id="rankTable">
+ <tr>
+     <th>Posição</th>
+     <th>MC</th>
+     <th>Pontos</th>
+ </tr>
+</table>
 
-    <button id="btnTrocarFoto" class="btn-edit" onclick="abrirUpload()">📸 Trocar Foto</button>
+<hr>
 
-    <input type="file" id="uploadFoto" accept="image/*" style="display:none" onchange="salvarFoto()">
+<!-- BOTÃO PARA LOGIN ADMIN -->
+<button class="btn-add btn" onclick="loginAdmin()">🔐 Login Admin</button>
 
-    <h1>🏆 Ranking de MCs</h1>
+<!-- ÁREA QUE SÓ ADMIN VÊ -->
+<div id="adminArea">
+<h2>Gerenciar MCs</h2>
+<table id="controleTable">
+ <tr>
+     <th>MC</th>
+     <th>Pontos</th>
+     <th>Ações</th>
+ </tr>
+</table>
+<button class="btn-add btn" onclick="novoMC()">➕ Adicionar MC</button>
+<div id="painelMC"></div>
+</div>
 
-    <div id="painel" class="painel">Carregando...</div>
-
-    <button class="btn-add" onclick="novoMC()">➕ Adicionar MC</button>
-    <button class="btn-reset" onclick="resetarPontos()">⛔ Resetar Pontos</button>
-
-    <table id="rankTable">
-        <tr>
-            <th>Posição</th>
-            <th>MC</th>
-            <th>Pontos</th>
-            <th>Controle</th>
-        </tr>
-    </table>
-
-    <a class="btn-voltar" href="index.html">⬅ Voltar</a>
 </div>
 
 <script>
-    const SENHA_CORRETA = "nucleopass";
+ let admin = false; // controle de permissão
 
-    let mcs = JSON.parse(localStorage.getItem("rankingMCs")) || [
-        { nome: "BOB", pontos: 0 },
-        { nome: "MORENO", pontos: 0 },
-        { nome: "KILLA", pontos: 0 },
-        { nome: "MATHEUXX", pontos: 0 },
-        { nome: "ALEMÃO", pontos: 0 }
-    ];
+ // Ajuste de MCs
+ let mcs = JSON.parse(localStorage.getItem("rankingMCs")) || [
+     { nome: "BOB", pontos: 0 },
+     { nome: "MORENO", pontos: 0 },
+     { nome: "KILLA", pontos: 0 },
+     { nome: "MATHEUXX", pontos: 0 },
+     { nome: "ALEMÃO", pontos: 0 }
+ ];
 
-    let fotoVencedor = localStorage.getItem("fotoVencedor") || "";
-    if (fotoVencedor) document.getElementById("fotoVencedor").src = fotoVencedor;
+ function salvar() { localStorage.setItem("rankingMCs", JSON.stringify(mcs)); }
 
-    function entrar() {
-        const senha = document.getElementById("senha").value;
-        if (senha === SENHA_CORRETA) {
-            document.getElementById("loginBox").style.display = "none";
-            document.body.classList.add("logado");
-            sessionStorage.setItem("logado", "true");
-        } else {
-            alert("Senha incorreta!");
-        }
-    }
+ function atualizarTudo() {
+     atualizarRanking();
+     if (admin) atualizarControle();
+     salvar();
+ }
 
-    if (sessionStorage.getItem("logado") === "true") {
-        document.getElementById("loginBox").style.display = "none";
-        document.body.classList.add("logado");
-    }
+ function atualizarRanking() {
+     mcs.sort((a,b)=>b.pontos-a.pontos);
+     const tabela = document.getElementById("rankTable");
+     tabela.innerHTML = `
+     <tr><th>Posição</th><th>MC</th><th>Pontos</th></tr>`;
+     mcs.forEach((mc,i)=>{
+         tabela.innerHTML += `<tr><td>${i+1}º</td><td>${mc.nome}</td><td>${mc.pontos}</td></tr>`;
+     });
+     document.getElementById("painel").innerHTML = `🥇 <b>Líder:</b> ${mcs[0].nome}`;
+ }
 
-    function abrirUpload() {
-        document.getElementById("uploadFoto").click();
-    }
+ function atualizarControle() {
+     const tabela = document.getElementById("controleTable");
+     tabela.innerHTML = `
+     <tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>`;
+     mcs.forEach((mc,i)=>{
+         tabela.innerHTML += `
+         <tr>
+             <td>${mc.nome}</td>
+             <td>${mc.pontos}</td>
+             <td>
+                 <button class="btn" onclick="alterarPonto(${i},0.5)">+0.5</button>
+                 <button class="btn" onclick="alterarPonto(${i},-0.5)">−0.5</button>
+                 <button class="btn-edit btn" onclick="editar(${i})">Editar</button>
+                 <button class="btn-del btn" onclick="remover(${i})">Excluir</button>
+             </td>
+         </tr>`;
+     });
+ }
 
-    function clicarFoto() {
-        if (sessionStorage.getItem("logado") === "true") {
-            abrirUpload();
-        }
-    }
+ function alterarPonto(i,v){ mcs[i].pontos += v; atualizarTudo(); }
+ function editar(i){ const nome=prompt("Novo nome:",mcs[i].nome); if(nome){mcs[i].nome=nome; atualizarTudo();}}
+ function remover(i){ if(confirm("Excluir MC?")){mcs.splice(i,1); atualizarTudo();}}
+ function novoMC(){ const nome=prompt("Nome do novo MC:"); if(nome){mcs.push({nome,pontos:0}); atualizarTudo();}}
 
-    function salvarFoto() {
-        const arquivo = document.getElementById("uploadFoto").files[0];
-        if (!arquivo) return;
+ // LOGIN DE ADMIN SIMPLES
+ function loginAdmin() {
+     const senha = prompt("Digite a senha de administrador:");
+     if (senha === "nucleopass") {
+         admin = true;
+         document.getElementById("adminArea").style.display = "block";
+         atualizarControle();
+         alert("Login realizado com sucesso!");
+     } else {
+         alert("Senha incorreta!");
+     }
+ }
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const imgBase64 = e.target.result;
-            document.getElementById("fotoVencedor").src = imgBase64;
-            localStorage.setItem("fotoVencedor", imgBase64);
-        };
-        reader.readAsDataURL(arquivo);
-    }
-
-    function salvar() {
-        localStorage.setItem("rankingMCs", JSON.stringify(mcs));
-    }
-
-    function atualizarTabela() {
-        mcs.sort((a, b) => b.pontos - a.pontos);
-
-        const tabela = document.getElementById("rankTable");
-        tabela.innerHTML = `
-            <tr>
-                <th>Posição</th>
-                <th>MC</th>
-                <th>Pontos</th>
-                <th>Controle</th>
-            </tr>
-        `;
-
-        let pos = 1;
-        mcs.forEach((mc, i) => {
-            let classe = pos === 1 ? "ouro" :
-                         pos === 2 ? "prata" :
-                         pos === 3 ? "bronze" : "";
-
-            tabela.innerHTML += `
-                <tr class="${classe}">
-                    <td>${pos}º</td>
-                    <td>${mc.nome}</td>
-                    <td>${mc.pontos}</td>
-                    <td>
-                        <button class="btn-ctrl" onclick="add(${i})">+</button>
-                        <button class="btn-ctrl" onclick="rem(${i})">–</button>
-                        <button class="btn-edit" onclick="editar(${i})">Editar</button>
-                        <button class="btn-remover" onclick="removerMC(${i})">X</button>
-                    </td>
-                </tr>
-            `;
-            pos++;
-        });
-
-        atualizarPainel();
-        salvar();
-    }
-
-    function atualizarPainel() {
-        document.getElementById("painel").innerHTML = `
-            🥇 <b>Líder:</b> ${mcs[0].nome}<br>
-            👥 <b>Total de MCs:</b> ${mcs.length}
-        `;
-    }
-
-    function add(i) {
-        mcs[i].pontos += 0.5;
-        atualizarTabela();
-    }
-
-    function rem(i) {
-        mcs[i].pontos -= 0.5;
-        atualizarTabela();
-    }
-
-    function editar(i) {
-        const novo = prompt("Novo nome do MC:", mcs[i].nome);
-        if (novo && novo.trim() !== "") {
-            mcs[i].nome = novo.trim();
-            atualizarTabela();
-        }
-    }
-
-    function removerMC(i) {
-        if (!confirm("Remover esse MC?")) return;
-        mcs.splice(i, 1);
-        atualizarTabela();
-    }
-
-    function resetarPontos() {
-        if (!confirm("Resetar TODOS os pontos?")) return;
-        mcs.forEach(mc => mc.pontos = 0);
-        atualizarTabela();
-    }
-
-    function novoMC() {
-        const nome = prompt("Nome do novo MC:");
-        if (!nome || nome.trim() === "") return;
-
-        mcs.push({ nome: nome.trim(), pontos: 0 });
-        atualizarTabela();
-    }
-
-    atualizarTabela();
+ atualizarTudo();
 </script>
-
 </body>
 </html>
