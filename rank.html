@@ -5,107 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ranking de MCs</title>
 
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbz4ksxt7doKSzoQBgr0UD06-78vusUbSPkrqYd4K-Y66vi8BGRcBdYBshKFiy6IHHtv6g/exec";
-
-let admin = false;
-let mcs = [];
-
-// 🔄 BUSCA DADOS DO BANCO (PLANILHA)
-async function carregarMCs() {
-  try {
-    const res = await fetch(API_URL);
-    mcs = await res.json();
-    atualizarRanking();
-    if (admin) atualizarControle();
-  } catch (e) {
-    console.error("Erro ao carregar dados", e);
-  }
-}
-
-// 🔁 ATUALIZA A CADA 2s
-setInterval(carregarMCs, 2000);
-
-// 🔐 LOGIN ADMIN
-window.loginAdmin = function () {
-  const senha = prompt("Digite a senha de administrador:");
-  if (senha === "nucleopass") {
-    admin = true;
-    document.getElementById("adminArea").style.display = "block";
-    atualizarControle();
-    alert("Login realizado com sucesso!");
-  } else {
-    alert("Senha incorreta!");
-  }
-};
-
-// ➕ / ➖ ALTERAR PONTOS
-window.alterarPonto = async function (i, valor) {
-  mcs[i].pontos += valor;
-
-  await fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      id: mcs[i].id,
-      pontos: mcs[i].pontos
-    })
-  });
-};
-
-// 🏆 RANKING
-function atualizarRanking() {
-  mcs.sort((a, b) => b.pontos - a.pontos);
-
-  const tabela = document.getElementById("rankTable");
-  tabela.innerHTML = `
-    <tr>
-      <th>Posição</th>
-      <th>MC</th>
-      <th>Pontos</th>
-    </tr>`;
-
-  mcs.forEach((mc, i) => {
-    tabela.innerHTML += `
-      <tr>
-        <td>${i + 1}º</td>
-        <td>${mc.nome}</td>
-        <td>${mc.pontos}</td>
-      </tr>`;
-  });
-
-  if (mcs.length > 0) {
-    document.getElementById("painel").innerHTML =
-      `🥇 <b>Líder:</b> ${mcs[0].nome}`;
-  }
-}
-
-// ⚙️ PAINEL ADMIN
-function atualizarControle() {
-  const tabela = document.getElementById("controleTable");
-  tabela.innerHTML = `
-    <tr>
-      <th>MC</th>
-      <th>Pontos</th>
-      <th>Ações</th>
-    </tr>`;
-
-  mcs.forEach((mc, i) => {
-    tabela.innerHTML += `
-      <tr>
-        <td>${mc.nome}</td>
-        <td>${mc.pontos}</td>
-        <td>
-          <button class="btn" onclick="alterarPonto(${i},0.5)">+0.5</button>
-          <button class="btn" onclick="alterarPonto(${i},-0.5)">−0.5</button>
-        </td>
-      </tr>`;
-  });
-}
-
-// 🚀 PRIMEIRA CARGA
-carregarMCs();
-</script>
-
 <style>
 body {
     margin: 0;
@@ -118,16 +17,16 @@ body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(0,0,0,0.65);
     backdrop-filter: blur(3px);
     z-index: -1;
 }
 .container {
     max-width: 450px;
     margin: 40px auto;
-    background: rgba(0,0,0,0.65);
+    background: rgba(0,0,0,0.7);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 14px;
     border: 2px solid white;
     text-align: center;
 }
@@ -135,24 +34,33 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
-table th, table td {
+th, td {
     padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
 }
-table th { background: rgba(255,255,255,0.15); }
-.btn { padding: 6px 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-.btn-add { background: #44ddff; color:black; }
-.btn-edit { background: #ffaa00; }
-.btn-del { background: #ff4444; color:white; }
-#painel, #painelMC {
-    margin-top: 15px;
+th {
+    background: rgba(255,255,255,0.15);
+}
+button {
+    padding: 6px 10px;
+    margin: 2px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-add { background:#44ddff; color:black; }
+.btn-edit { background:#ffaa00; }
+.btn-del { background:#ff4444; color:white; }
+.btn-p { background:#22cc88; }
+.btn-m { background:#cc4444; color:white; }
+#adminArea { display:none; }
+#painel {
+    margin-bottom: 10px;
     padding: 10px;
     background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
     border-radius: 8px;
 }
-#adminArea { display: none; }
 </style>
 </head>
 
@@ -162,17 +70,131 @@ table th { background: rgba(255,255,255,0.15); }
 
 <div id="painel">Carregando...</div>
 
-<table id="rankTable"></table>
+<table id="rankTable">
+<tr><th>#</th><th>MC</th><th>Pontos</th></tr>
+</table>
 
 <hr>
 
-<button class="btn-add btn" onclick="loginAdmin()">🔐 Login Admin</button>
+<button class="btn-add" onclick="loginAdmin()">🔐 Login Admin</button>
 
 <div id="adminArea">
 <h2>Gerenciar MCs</h2>
-<table id="controleTable"></table>
+
+<table id="controleTable">
+<tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>
+</table>
+
+<button class="btn-add" onclick="novoMC()">➕ Adicionar MC</button>
+</div>
 </div>
 
-</div>
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxL6GMOW-eJCKhzdYtWj1du5lYhsEkWiDkL3Z-aTvVfc9eFdd8NNZy69OfAJhSGZyDrhw/exec";
+
+let admin = false;
+let mcs = [];
+
+async function carregarMCs() {
+    const res = await fetch(API_URL);
+    mcs = await res.json();
+    atualizarRanking();
+    if (admin) atualizarControle();
+}
+
+function loginAdmin() {
+    const senha = prompt("Senha de administrador:");
+    if (senha === "nucleopass") {
+        admin = true;
+        document.getElementById("adminArea").style.display = "block";
+        atualizarControle();
+        alert("Admin liberado");
+    } else {
+        alert("Senha incorreta");
+    }
+}
+
+async function novoMC() {
+    const nome = prompt("Nome do MC:");
+    if (!nome) return;
+
+    await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action:"add", nome })
+    });
+    carregarMCs();
+}
+
+async function alterarPonto(id, valor) {
+    await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action:"pontos", id, valor })
+    });
+    carregarMCs();
+}
+
+async function editarMC(id, atual) {
+    const nome = prompt("Novo nome:", atual);
+    if (!nome) return;
+
+    await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action:"edit", id, nome })
+    });
+    carregarMCs();
+}
+
+async function removerMC(id) {
+    if (!confirm("Excluir MC?")) return;
+
+    await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action:"delete", id })
+    });
+    carregarMCs();
+}
+
+function atualizarRanking() {
+    mcs.sort((a,b)=>b.pontos - a.pontos);
+
+    const t = document.getElementById("rankTable");
+    t.innerHTML = "<tr><th>#</th><th>MC</th><th>Pontos</th></tr>";
+
+    mcs.forEach((mc,i)=>{
+        t.innerHTML += `
+        <tr>
+            <td>${i+1}</td>
+            <td>${mc.nome}</td>
+            <td>${mc.pontos}</td>
+        </tr>`;
+    });
+
+    if (mcs.length) {
+        document.getElementById("painel").innerHTML =
+            `🥇 Líder: <b>${mcs[0].nome}</b>`;
+    }
+}
+
+function atualizarControle() {
+    const t = document.getElementById("controleTable");
+    t.innerHTML = "<tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>";
+
+    mcs.forEach(mc=>{
+        t.innerHTML += `
+        <tr>
+            <td>${mc.nome}</td>
+            <td>${mc.pontos}</td>
+            <td>
+                <button class="btn-p" onclick="alterarPonto(${mc.id},0.5)">+0.5</button>
+                <button class="btn-m" onclick="alterarPonto(${mc.id},-0.5)">-0.5</button>
+                <button class="btn-edit" onclick="editarMC(${mc.id},'${mc.nome}')">Editar</button>
+                <button class="btn-del" onclick="removerMC(${mc.id})">Excluir</button>
+            </td>
+        </tr>`;
+    });
+}
+
+carregarMCs();
+</script>
 </body>
 </html>
