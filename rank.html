@@ -5,118 +5,104 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ranking de MCs</title>
 
-<!-- Firebase -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-    getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAJopMM_tGohr8BQXZziVBt6UHWIz4dmNk",
-  authDomain: "ranking-mcs.firebaseapp.com",
-  projectId: "ranking-mcs",
-  storageBucket: "ranking-mcs.firebasestorage.app",
-  messagingSenderId: "137351607662",
-  appId: "1:137351607662:web:daaa71f227902150f4bd7f"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbz4ksxt7doKSzoQBgr0UD06-78vusUbSPkrqYd4K-Y66vi8BGRcBdYBshKFiy6IHHtv6g/exec";
 
 let admin = false;
 let mcs = [];
 
+// 🔄 BUSCA DADOS DO BANCO (PLANILHA)
 async function carregarMCs() {
-    onSnapshot(collection(db, "mcs"), (snapshot) => {
-        mcs = [];
-        snapshot.forEach(doc => {
-            mcs.push({ id: doc.id, ...doc.data() });
-        });
-
-        atualizarRanking();
-        if (admin) atualizarControle();
-    });
+  try {
+    const res = await fetch(API_URL);
+    mcs = await res.json();
+    atualizarRanking();
+    if (admin) atualizarControle();
+  } catch (e) {
+    console.error("Erro ao carregar dados", e);
+  }
 }
 
+// 🔁 ATUALIZA A CADA 2s
+setInterval(carregarMCs, 2000);
+
+// 🔐 LOGIN ADMIN
 window.loginAdmin = function () {
-    const senha = prompt("Digite a senha de administrador:");
-    if (senha === "nucleopass") {
-        admin = true;
-        document.getElementById("adminArea").style.display = "block";
-        atualizarControle();
-        alert("Login realizado com sucesso!");
-    } else {
-        alert("Senha incorreta!");
-    }
+  const senha = prompt("Digite a senha de administrador:");
+  if (senha === "nucleopass") {
+    admin = true;
+    document.getElementById("adminArea").style.display = "block";
+    atualizarControle();
+    alert("Login realizado com sucesso!");
+  } else {
+    alert("Senha incorreta!");
+  }
 };
 
+// ➕ / ➖ ALTERAR PONTOS
 window.alterarPonto = async function (i, valor) {
-    const ref = doc(db, "mcs", mcs[i].id);
-    await updateDoc(ref, { pontos: mcs[i].pontos + valor });
+  mcs[i].pontos += valor;
+
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      id: mcs[i].id,
+      pontos: mcs[i].pontos
+    })
+  });
 };
 
-window.editar = async function (i) {
-    const novo = prompt("Novo nome:", mcs[i].nome);
-    if (novo) {
-        await updateDoc(doc(db, "mcs", mcs[i].id), { nome: novo });
-    }
-};
-
-window.remover = async function (i) {
-    if (confirm("Excluir MC?")) {
-        await deleteDoc(doc(db, "mcs", mcs[i].id));
-    }
-};
-
-window.novoMC = async function () {
-    const nome = prompt("Nome do novo MC:");
-    if (!nome) return;
-    await addDoc(collection(db, "mcs"), { nome, pontos: 0 });
-};
-
-// Atualiza rank
+// 🏆 RANKING
 function atualizarRanking() {
-    mcs.sort((a, b) => b.pontos - a.pontos);
+  mcs.sort((a, b) => b.pontos - a.pontos);
 
-    const tabela = document.getElementById("rankTable");
-    tabela.innerHTML = `<tr><th>Posição</th><th>MC</th><th>Pontos</th></tr>`;
+  const tabela = document.getElementById("rankTable");
+  tabela.innerHTML = `
+    <tr>
+      <th>Posição</th>
+      <th>MC</th>
+      <th>Pontos</th>
+    </tr>`;
 
-    mcs.forEach((mc, i) => {
-        tabela.innerHTML += `
-        <tr>
-           <td>${i+1}º</td>
-           <td>${mc.nome}</td>
-           <td>${mc.pontos}</td>
-        </tr>`;
-    });
+  mcs.forEach((mc, i) => {
+    tabela.innerHTML += `
+      <tr>
+        <td>${i + 1}º</td>
+        <td>${mc.nome}</td>
+        <td>${mc.pontos}</td>
+      </tr>`;
+  });
 
-    if (mcs.length > 0) {
-        document.getElementById("painel").innerHTML =
-            `🥇 <b>Líder:</b> ${mcs[0].nome}`;
-    }
+  if (mcs.length > 0) {
+    document.getElementById("painel").innerHTML =
+      `🥇 <b>Líder:</b> ${mcs[0].nome}`;
+  }
 }
 
-// Atualiza painel ADM
+// ⚙️ PAINEL ADMIN
 function atualizarControle() {
-    const tabela = document.getElementById("controleTable");
-    tabela.innerHTML = `<tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>`;
+  const tabela = document.getElementById("controleTable");
+  tabela.innerHTML = `
+    <tr>
+      <th>MC</th>
+      <th>Pontos</th>
+      <th>Ações</th>
+    </tr>`;
 
-    mcs.forEach((mc, i) => {
-        tabela.innerHTML += `
-        <tr>
-          <td>${mc.nome}</td>
-          <td>${mc.pontos}</td>
-          <td>
-            <button class="btn" onclick="alterarPonto(${i},0.5)">+0.5</button>
-            <button class="btn" onclick="alterarPonto(${i},-0.5)">−0.5</button>
-            <button class="btn-edit btn" onclick="editar(${i})">Editar</button>
-            <button class="btn-del btn" onclick="remover(${i})">Excluir</button>
-          </td>
-        </tr>`;
-    });
+  mcs.forEach((mc, i) => {
+    tabela.innerHTML += `
+      <tr>
+        <td>${mc.nome}</td>
+        <td>${mc.pontos}</td>
+        <td>
+          <button class="btn" onclick="alterarPonto(${i},0.5)">+0.5</button>
+          <button class="btn" onclick="alterarPonto(${i},-0.5)">−0.5</button>
+        </td>
+      </tr>`;
+  });
 }
 
+// 🚀 PRIMEIRA CARGA
 carregarMCs();
 </script>
 
@@ -169,19 +155,14 @@ table th { background: rgba(255,255,255,0.15); }
 #adminArea { display: none; }
 </style>
 </head>
+
 <body>
 <div class="container">
 <h1>🏆 Ranking de MCs</h1>
 
 <div id="painel">Carregando...</div>
 
-<table id="rankTable">
- <tr>
-     <th>Posição</th>
-     <th>MC</th>
-     <th>Pontos</th>
- </tr>
-</table>
+<table id="rankTable"></table>
 
 <hr>
 
@@ -189,15 +170,7 @@ table th { background: rgba(255,255,255,0.15); }
 
 <div id="adminArea">
 <h2>Gerenciar MCs</h2>
-<table id="controleTable">
- <tr>
-     <th>MC</th>
-     <th>Pontos</th>
-     <th>Ações</th>
- </tr>
-</table>
-<button class="btn-add btn" onclick="novoMC()">➕ Adicionar MC</button>
-<div id="painelMC"></div>
+<table id="controleTable"></table>
 </div>
 
 </div>
