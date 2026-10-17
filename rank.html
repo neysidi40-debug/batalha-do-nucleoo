@@ -1,200 +1,103 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ranking de MCs</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: url('fundo.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-}
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(3px);
-    z-index: -1;
-}
-.container {
-    max-width: 450px;
-    margin: 40px auto;
-    background: rgba(0,0,0,0.7);
-    padding: 20px;
-    border-radius: 14px;
-    border: 2px solid white;
-    text-align: center;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.3);
-}
-th {
-    background: rgba(255,255,255,0.15);
-}
-button {
-    padding: 6px 10px;
-    margin: 2px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.btn-add { background:#44ddff; color:black; }
-.btn-edit { background:#ffaa00; }
-.btn-del { background:#ff4444; color:white; }
-.btn-p { background:#22cc88; }
-.btn-m { background:#cc4444; color:white; }
-#adminArea { display:none; }
-#painel {
-    margin-bottom: 10px;
-    padding: 10px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 8px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10100f">
+    <title>Ranking de MCs | Batalha do Núcleo</title>
+    <link rel="stylesheet" href="site.css">
 </head>
-
 <body>
-<div class="container">
-<h1>🏆 Ranking de MCs</h1>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="brand" href="index.html" aria-label="Batalha do Núcleo — início">
+                <img src="batalha.png" alt="">
+                <span class="brand-copy">
+                    <strong>Batalha do Núcleo</strong>
+                    <span>Rima, encontro e cultura</span>
+                </span>
+            </a>
+            <nav class="site-nav" aria-label="Navegação principal">
+                <a href="index.html">Início</a>
+                <a href="mcs.html">MCs</a>
+                <a href="rank.html" aria-current="page">Ranking</a>
+                <a href="biblioteca.html">Biblioteca</a>
+            </nav>
+        </div>
+    </header>
 
-<div id="painel">Carregando...</div>
+    <main class="page-shell">
+        <p class="eyebrow" style="justify-content: center;">Disputa na roda</p>
+        <h1 class="page-title">Ranking de MCs</h1>
+        <p class="page-intro">Acompanhe a classificação da comunidade.</p>
 
-<table id="rankTable">
-<tr><th>#</th><th>MC</th><th>Pontos</th></tr>
-</table>
+        <section class="surface-card rank-card" aria-label="Classificação dos MCs">
+            <div class="rank-leader" id="painel" aria-live="polite">Carregando ranking...</div>
+            <div class="table-wrap">
+                <table class="rank-table" id="rankTable">
+                    <thead>
+                        <tr><th scope="col">Posição</th><th scope="col">MC</th><th scope="col">Pontos</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <p class="rank-notice">O gerenciamento de pontos está temporariamente indisponível enquanto a autorização segura do servidor é configurada.</p>
+        </section>
 
-<hr>
+        <a class="back-link" href="index.html">← Voltar ao início</a>
+    </main>
 
-<button class="btn-add" onclick="loginAdmin()">🔐 Login Admin</button>
+    <footer class="site-footer">
+        <p>Feito para a comunidade · MangueBoyz — Steh &amp; Kapu</p>
+    </footer>
 
-<div id="adminArea">
-<h2>Gerenciar MCs</h2>
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbxL6GMOW-eJCKhzdYtWj1du5lYhsEkWiDkL3Z-aTvVfc9eFdd8NNZy69OfAJhSGZyDrhw/exec";
 
-<table id="controleTable">
-<tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>
-</table>
+        async function carregarMCs() {
+            const painel = document.getElementById("painel");
+            const corpoTabela = document.querySelector("#rankTable tbody");
 
-<button class="btn-add" onclick="novoMC()">➕ Adicionar MC</button>
-</div>
-</div>
+            try {
+                const resposta = await fetch(API_URL);
+                if (!resposta.ok) {
+                    throw new Error(`Falha ao carregar o ranking (HTTP ${resposta.status}).`);
+                }
 
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxL6GMOW-eJCKhzdYtWj1du5lYhsEkWiDkL3Z-aTvVfc9eFdd8NNZy69OfAJhSGZyDrhw/exec";
+                const dados = await resposta.json();
+                if (!Array.isArray(dados)) {
+                    throw new Error("A resposta do ranking tem um formato inválido.");
+                }
 
-let admin = false;
-let mcs = [];
+                dados.sort((a, b) => Number(b.pontos) - Number(a.pontos));
+                corpoTabela.replaceChildren();
 
-async function carregarMCs() {
-    const res = await fetch(API_URL);
-    mcs = await res.json();
-    atualizarRanking();
-    if (admin) atualizarControle();
-}
+                dados.forEach((mc, indice) => {
+                    const linha = document.createElement("tr");
+                    const posicao = document.createElement("td");
+                    const nome = document.createElement("td");
+                    const pontos = document.createElement("td");
+                    const pontosMC = Number(mc.pontos);
 
-function loginAdmin() {
-    const senha = prompt("Senha de administrador:");
-    if (senha === "nucleopass") {
-        admin = true;
-        document.getElementById("adminArea").style.display = "block";
-        atualizarControle();
-        alert("Admin liberado");
-    } else {
-        alert("Senha incorreta");
-    }
-}
+                    posicao.textContent = String(indice + 1);
+                    nome.textContent = typeof mc.nome === "string" ? mc.nome : "";
+                    pontos.textContent = Number.isFinite(pontosMC) ? String(pontosMC) : "—";
+                    linha.append(posicao, nome, pontos);
+                    corpoTabela.appendChild(linha);
+                });
 
-async function novoMC() {
-    const nome = prompt("Nome do MC:");
-    if (!nome) return;
+                if (dados.length > 0) {
+                    painel.textContent = `🥇 Líder: ${typeof dados[0].nome === "string" ? dados[0].nome : ""}`;
+                } else {
+                    painel.textContent = "Ainda não há MCs no ranking.";
+                }
+            } catch (erro) {
+                console.error("Não foi possível carregar o ranking.", erro);
+                painel.textContent = "Não foi possível carregar o ranking. Tente novamente mais tarde.";
+            }
+        }
 
-    await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action:"add", nome })
-    });
-    carregarMCs();
-}
-
-async function alterarPonto(id, valor) {
-    await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action:"pontos", id, valor })
-    });
-    carregarMCs();
-}
-
-async function editarMC(id, atual) {
-    const nome = prompt("Novo nome:", atual);
-    if (!nome) return;
-
-    await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action:"edit", id, nome })
-    });
-    carregarMCs();
-}
-
-async function removerMC(id) {
-    if (!confirm("Excluir MC?")) return;
-
-    await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action:"delete", id })
-    });
-    carregarMCs();
-}
-
-function atualizarRanking() {
-    mcs.sort((a,b)=>b.pontos - a.pontos);
-
-    const t = document.getElementById("rankTable");
-    t.innerHTML = "<tr><th>#</th><th>MC</th><th>Pontos</th></tr>";
-
-    mcs.forEach((mc,i)=>{
-        t.innerHTML += `
-        <tr>
-            <td>${i+1}</td>
-            <td>${mc.nome}</td>
-            <td>${mc.pontos}</td>
-        </tr>`;
-    });
-
-    if (mcs.length) {
-        document.getElementById("painel").innerHTML =
-            `🥇 Líder: <b>${mcs[0].nome}</b>`;
-    }
-}
-
-function atualizarControle() {
-    const t = document.getElementById("controleTable");
-    t.innerHTML = "<tr><th>MC</th><th>Pontos</th><th>Ações</th></tr>";
-
-    mcs.forEach(mc=>{
-        t.innerHTML += `
-        <tr>
-            <td>${mc.nome}</td>
-            <td>${mc.pontos}</td>
-            <td>
-                <button class="btn-p" onclick="alterarPonto(${mc.id},0.5)">+0.5</button>
-                <button class="btn-m" onclick="alterarPonto(${mc.id},-0.5)">-0.5</button>
-                <button class="btn-edit" onclick="editarMC(${mc.id},'${mc.nome}')">Editar</button>
-                <button class="btn-del" onclick="removerMC(${mc.id})">Excluir</button>
-            </td>
-        </tr>`;
-    });
-}
-
-carregarMCs();
-</script>
+        carregarMCs();
+    </script>
 </body>
 </html>

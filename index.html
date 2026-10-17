@@ -1,421 +1,108 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Comunidade</title>
-
-    <style>
-        /* ------ TELA DE LOADING ------ */
-        #loading {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .spinner {
-            width: 55px;
-            height: 55px;
-            border: 6px solid rgba(255,255,255,0.18);
-            border-top: 6px solid #ffcc00;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            margin-top: 14px;
-            font-size: 16px;
-            color: #fff;
-            letter-spacing: .2px;
-            animation: pulse 1s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { opacity: 0.6; transform: translateY(0); }
-            to { opacity: 1; transform: translateY(-4px); }
-        }
-
-        /* state when hiding - only changes opacity/visibility */
-        #loading.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        /* ------ EFEITO FADE IN NA PÁGINA ------ */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: url('fundo.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #fff;
-            animation: pageFade 0.9s ease;
-        }
-
-        @keyframes pageFade {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* ESCURECER FUNDO */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(2px);
-            z-index: -1;
-        }
-
-        /* ---- TOPO ---- */
-        header {
-            text-align: center;
-            margin-top: 20px;
-            animation: zoomTopo 10s ease-in-out infinite alternate;
-        }
-
-        @keyframes zoomTopo {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
-        }
-
-        header img {
-            width: 160px;
-            height: auto;
-            display: inline-block;
-        }
-
-        /* BOTÕES DE MENU */
-        .menu-btn, .menu-btn-right {
-            font-size: 22px;
-            cursor: pointer;
-            position: fixed;
-            top: 10px;
-            z-index: 1500;
-            color: white;
-            background: rgba(0,0,0,0.6);
-            padding: 6px 10px;
-            border-radius: 5px;
-            transition: 0.18s ease;
-            user-select: none;
-        }
-
-        .menu-btn { left: 10px; }
-        .menu-btn-right { right: 10px; }
-
-        .menu-btn:hover, .menu-btn-right:hover {
-            background: rgba(255,255,255,0.12);
-        }
-
-        /* MENUS */
-        .sidebar, .sidebar-right {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1600;
-            top: 0;
-            background-color: rgba(0,0,0,0.96);
-            overflow-x: hidden;
-            transition: width 0.35s ease;
-            padding-top: 40px;
-            color: #fff;
-        }
-
-        .sidebar { left: 0; }
-        .sidebar-right { right: 0; }
-
-        .sidebar.open { width: 280px; }
-        .sidebar-right.open { width: 280px; }
-
-        @media (max-width: 480px) {
-            .sidebar.open, .sidebar-right.open { width: 100%; }
-        }
-
-        .sidebar-content {
-            max-height: calc(100% - 60px);
-            overflow-y: auto;
-            padding-bottom: 10px;
-        }
-
-        .sidebar h2, .sidebar p, .sidebar a,
-        .sidebar-right h2, .sidebar-right a {
-            padding: 8px 20px;
-        }
-
-        .sidebar h2 { font-size: 18px; font-weight: bold; }
-        .sidebar p { font-size: 14px; }
-
-        .sidebar a, .sidebar-right a {
-            font-size: 16px;
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 6px;
-            transition: color .18s ease;
-        }
-
-        .sidebar a:hover, .sidebar-right a:hover { color: #ffcc00; }
-
-        .sidebar iframe {
-            width: 90%;
-            height: 150px;
-            border: 0;
-            border-radius: 8px;
-            margin: 10px auto;
-            display: block;
-        }
-
-        .close-btn, .close-btn-right {
-            position: absolute;
-            font-size: 28px;
-            cursor: pointer;
-            color: white;
-            transition: color .15s ease;
-            user-select: none;
-        }
-
-        .close-btn { right: 15px; top: 10px; }
-        .close-btn-right { left: 15px; top: 10px; }
-
-        .close-btn:hover, .close-btn-right:hover { color: #ffcc00; }
-
-        /* CARD PRINCIPAL */
-        .main {
-            display: flex;
-            justify-content: center;
-            padding: 12px;
-        }
-
-        .card {
-            background: rgba(0,0,0,0.62);
-            border: 1px solid rgba(255,255,255,0.45);
-            padding: 16px;
-            border-radius: 12px;
-            max-width: 380px;
-            text-align: center;
-            backdrop-filter: blur(4px);
-            animation: subir 0.9s ease;
-        }
-
-        @keyframes subir {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card h2 { font-size: 20px; margin: 0 0 8px 0; }
-        .card p { font-size: 14px; margin: 0 0 10px 0; }
-
-        .btn {
-            background: #00c246;
-            padding: 12px 18px;
-            border-radius: 6px;
-            color: #fff;
-            text-decoration: none;
-            border: 1px solid #008f33;
-            transition: transform 0.18s ease, background 0.18s ease;
-            display: inline-block;
-            margin-top: 8px;
-            font-weight: 700;
-        }
-
-        .btn:hover {
-            background: #00e154;
-            transform: scale(1.04);
-        }
-
-        .patrocinio-bottom {
-            text-align: center;
-            margin-top: 36px;
-            margin-bottom: 20px;
-            animation: pageFade 0.8s ease;
-        }
-
-        .patrocinio-bottom img { width: 85px; opacity: 0.95; border-radius: 6px; }
-
-        footer {
-            text-align: center;
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 12px;
-            opacity: 0.85;
-        }
-
-        /* mobile */
-        @media (max-width: 420px) {
-            header img { width: 130px; }
-            .card { padding: 14px; }
-            .btn { padding: 10px 14px; font-size: 15px; }
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10100f">
+    <title>Batalha do Núcleo | Cultura Hip-Hop em Recife</title>
+    <link rel="stylesheet" href="site.css">
 </head>
 <body>
-
-    <!-- TELA DE LOADING -->
-    <div id="loading" aria-hidden="false">
-        <div class="spinner" role="img" aria-label="Carregando"></div>
-        <div class="loading-text">Carregando...</div>
-    </div>
-
-    <!-- HEADER -->
-    <header>
-        <img src="batalha.png" alt="Logo">
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="brand" href="index.html" aria-label="Batalha do Núcleo — início">
+                <img src="batalha.png" alt="">
+                <span class="brand-copy">
+                    <strong>Batalha do Núcleo</strong>
+                    <span>Rima, encontro e cultura</span>
+                </span>
+            </a>
+            <nav class="site-nav" aria-label="Navegação principal">
+                <a href="index.html" aria-current="page">Início</a>
+                <a href="mcs.html">MCs</a>
+                <a href="rank.html">Ranking</a>
+                <a href="biblioteca.html">Biblioteca</a>
+            </nav>
+        </div>
     </header>
 
-    <!-- MENU BOTÕES -->
-    <div class="menu-btn" onclick="toggleMenu()" aria-hidden="false">☰</div>
-    <div class="menu-btn-right" onclick="toggleMenuRight()" aria-hidden="false">☰</div>
+    <main class="page-shell">
+        <section class="hero" aria-labelledby="titulo-principal">
+            <img class="hero-logo" src="batalha.png" alt="Batalha do Núcleo">
+            <p class="eyebrow">Hip-Hop independente · Recife, PE</p>
+            <h1 id="titulo-principal">A cultura acontece no encontro.</h1>
+            <p>Uma roda, muitas vozes e a força da rima no coração de Caetés 1.</p>
+        </section>
 
-    <!-- SIDEBAR ESQUERDO -->
-    <div id="mySidebar" class="sidebar" aria-hidden="true">
-        <div class="close-btn" onclick="closeMenu()">×</div>
-        <div class="sidebar-content">
-            <h2>📍 Local</h2>
-            <p>PRAÇA DO TERMINAL - CAETÉS 1</p>
-
-            <h2>⏰ Dia & Horário</h2>
-            <p>Toda quinta-feira às 18:00</p>
-
-            <h2>📚 Biblioteca</h2>
-            <a href="biblioteca.html">Abrir Biblioteca</a>
-
-            <h2>🏆 Rank de MCs</h2>
-            <a href="rank.html">Ver Rank de MCs</a>
-
-            <h2>📍 Localização</h2>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.7307001526824!2d-34.9320465!3d-7.923172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab170077a0d0f9%3A0x8868397509e33580!2zUHJhw6dhIElJIC0gQ2FldMOpcyAx!5e0!3m2!1spt-BR!2sbr!4v1763388117642!5m2!1spt-BR!2sbr"
-                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-    </div>
-
-    <!-- SIDEBAR DIREITO -->
-    <div id="rightSidebar" class="sidebar-right" aria-hidden="true">
-        <div class="close-btn-right" onclick="closeMenuRight()">×</div>
-        <h2 style="padding: 8px 20px;">👥 Comunidade</h2>
-        <a href="mcs.html" style="padding: 8px 20px; display:block;">Veja um pouco do nosso trabalho</a>
-    </div>
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <div class="main">
-        <div class="card" role="main" aria-live="polite">
-            <h2>📲 Inscrições</h2>
-            <p>Clique no botão abaixo para se inscrever pelo WhatsApp!</p>
-
-            <a class="btn" href="https://wa.me/558194237249?text=Quero%20batalhar!" target="_blank" rel="noopener noreferrer">
-                INSCREVER AGORA
+        <section class="surface-card signup-card" aria-labelledby="titulo-inscricao">
+            <div>
+                <span class="info-label">Chega junto</span>
+                <h2 id="titulo-inscricao">Sua próxima rima começa aqui.</h2>
+                <p>Faça sua inscrição gratuita pelo WhatsApp e venha batalhar com a gente.</p>
+            </div>
+            <a class="button button-whatsapp" href="https://wa.me/558194237249?text=Quero%20batalhar!" target="_blank" rel="noopener noreferrer">
+                Inscrever-se pelo WhatsApp <span aria-hidden="true">↗</span>
             </a>
+        </section>
 
-            <p style="margin-top:8px; font-size:12px; color:#ffcc00; font-weight:bold;">
-                ⚡ A inscrição é totalmente gratuita!
-            </p>
+        <div class="card-grid section">
+            <section class="surface-card" aria-labelledby="titulo-encontro">
+                <span class="info-label">Nosso encontro</span>
+                <h2 id="titulo-encontro">Toda quinta-feira</h2>
+                <p>Às 18h, na Praça do Terminal, em Caetés 1.</p>
+                <iframe
+                    class="map-frame"
+                    title="Mapa da Praça do Terminal, Caetés 1"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.7307001526824!2d-34.9320465!3d-7.923172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab170077a0d0f9%3A0x8868397509e33580!2zUHJhw6dhIElJIC0gQ2FldMOpcyAx!5e0!3m2!1spt-BR!2sbr!4v1763388117642!5m2!1spt-BR!2sbr"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    allowfullscreen></iframe>
+            </section>
+
+            <section class="surface-card" aria-labelledby="titulo-sorteio">
+                <span class="info-label">Dinâmica da roda</span>
+                <h2 id="titulo-sorteio">Quem vai rimar?</h2>
+                <p>Escreva os nomes separados por vírgula e sorteie quem começa.</p>
+                <form class="raffle-form" id="raffleForm">
+                    <label class="visually-hidden" for="nomesInput">Nomes dos participantes</label>
+                    <input id="nomesInput" name="nomes" type="text" placeholder="Ex.: Kapu, Steh, João" autocomplete="off">
+                    <button class="button button-primary" type="submit">Sortear</button>
+                </form>
+                <p class="raffle-result" id="resultadoSorteio" aria-live="polite"></p>
+            </section>
         </div>
-    </div>
 
-    <!-- ⭐ NOVO CARD DO SORTEIO -->
-    <div class="main">
-        <div class="card" id="sorteioCard" style="margin-top: 20px;">
-            <h2>Quem vai Rimar?</h2>
-            <p>Digite os nomes separados por vírgula e clique no botão!</p>
-
-            <input id="nomesInput" type="text" placeholder="ex: Kapu, Steh, João"
-                style="width: 90%; padding: 10px; margin-top: 10px; border-radius: 6px; border: none;">
-
-            <a class="btn" onclick="sortear()">🎲 Sortear</a>
-
-            <p id="resultadoSorteio"
-                style="margin-top: 12px; font-size: 16px; font-weight: bold; color: #ffcc00;"></p>
+        <div class="sponsor">
+            <span>Apoio que fortalece a cultura</span>
+            <img src="patrocinio.png" alt="Marca do patrocinador da Batalha do Núcleo" loading="lazy">
         </div>
-    </div>
+    </main>
 
-    <div class="patrocinio-bottom">
-        <img src="patrocinio.png" alt="Patrocinador">
-    </div>
-
-    <footer>
-        Feito para a comunidade — MangueBoyz - Steh & Kapu
+    <footer class="site-footer">
+        <p>Feito para a comunidade · MangueBoyz — Steh &amp; Desenvolvido por Kapu</p>
     </footer>
 
-<script>
-    /* ------------- LOADING ------------- */
-    (function() {
-        const loading = document.getElementById('loading');
-        let hidden = false;
+    <script>
+        const raffleForm = document.getElementById("raffleForm");
+        const namesInput = document.getElementById("nomesInput");
+        const raffleResult = document.getElementById("resultadoSorteio");
 
-        function hideLoading() {
-            if (!loading || hidden) return;
-            hidden = true;
-            loading.classList.add('hidden');
-            setTimeout(() => {
-                if (loading && loading.parentNode) loading.style.display = 'none';
-            }, 650);
-        }
+        raffleForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const names = namesInput.value
+                .split(",")
+                .map((name) => name.trim())
+                .filter(Boolean);
 
-        window.addEventListener('load', hideLoading);
-        setTimeout(hideLoading, 2500);
-        loading.addEventListener('click', hideLoading);
-    })();
+            if (names.length === 0) {
+                raffleResult.textContent = "Digite pelo menos um nome para sortear.";
+                namesInput.focus();
+                return;
+            }
 
-    /* ------------- MENUS ------------- */
-    function toggleMenu() {
-        const sidebar = document.getElementById('mySidebar');
-        sidebar.classList.toggle('open');
-        sidebar.setAttribute('aria-hidden', !sidebar.classList.contains('open'));
-    }
-
-    function closeMenu() {
-        const sidebar = document.getElementById('mySidebar');
-        sidebar.classList.remove('open');
-        sidebar.setAttribute('aria-hidden', 'true');
-    }
-
-    function toggleMenuRight() {
-        const sidebar = document.getElementById('rightSidebar');
-        sidebar.classList.toggle('open');
-        sidebar.setAttribute('aria-hidden', !sidebar.classList.contains('open'));
-    }
-
-    function closeMenuRight() {
-        const sidebar = document.getElementById('rightSidebar');
-        sidebar.classList.remove('open');
-        sidebar.setAttribute('aria-hidden', 'true');
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeMenu();
-            closeMenuRight();
-        }
-    });
-
-    /* ------------- FUNÇÃO DE SORTEIO ------------- */
-    function sortear() {
-        let nomes = document.getElementById("nomesInput").value;
-
-        if (!nomes.trim()) {
-            document.getElementById("resultadoSorteio").innerText = "Digite pelo menos 1 nome!";
-            return;
-        }
-
-        let lista = nomes.split(",").map(n => n.trim()).filter(n => n.length > 0);
-
-        let vencedor = lista[Math.floor(Math.random() * lista.length)];
-
-        document.getElementById("resultadoSorteio").innerText = "FOI SELECIONADO!: " + vencedor + "!";
-    }
-</script>
-
+            const selected = names[Math.floor(Math.random() * names.length)];
+            raffleResult.textContent = `Quem começa: ${selected}!`;
+        });
+    </script>
 </body>
 </html>

@@ -1,317 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta-name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCs – Comunidade</title>
-
-<style>
-    /* Corpo do site */
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #0b0b0b;
-        color: #fff;
-        padding: 20px;
-        position: relative;
-        overflow-x: hidden;
-    }
-
-    /* Fundo com imagem e partículas */
-    body::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 110%;
-        height: 110%;
-        background-image: url('fundo-do-site.jpg'); /* imagem principal do fundo */
-        background-size: cover;
-        background-position: center;
-        filter: blur(5px) brightness(0.3);
-        opacity: 0;
-        transition: transform 1s ease, opacity 0.5s ease;
-        transform: scale(1);
-        z-index: -2;
-        pointer-events: none;
-    }
-
-    body:hover::after {
-        opacity: 0.25;
-        transform: scale(1.05);
-    }
-
-    /* Partículas animadas */
-    .particles {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-        overflow: hidden;
-    }
-
-    .particle {
-        position: absolute;
-        background: rgba(255,255,255,0.6);
-        border-radius: 50%;
-        width: 4px;
-        height: 4px;
-        animation: float 10s linear infinite;
-    }
-
-    /* animação de subida e fade das partículas */
-    @keyframes float {
-        0% {
-            transform: translateY(100vh) translateX(0) scale(1);
-            opacity: 0;
-        }
-        10% {
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(-10vh) translateX(50px) scale(0.5);
-            opacity: 0;
-        }
-    }
-
-    /* Título */
-    h1 {
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 28px;
-        color: #ffcc00;
-        text-shadow: 1px 1px 5px #000;
-    }
-
-    /* Lista de MCs */
-    .mc-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 20px;
-        max-width: 1000px;
-        margin: auto;
-    }
-
-    /* Card de cada MC */
-    .mc-card {
-        position: relative;
-        background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
-        border-radius: 16px;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        overflow: hidden;
-        transition: transform 0.3s, box-shadow 0.3s;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: appear 0.5s forwards;
-    }
-
-    /* Atraso progressivo nos cards */
-    .mc-card:nth-child(1) { animation-delay: 0.1s; }
-    .mc-card:nth-child(2) { animation-delay: 0.3s; }
-    .mc-card:nth-child(3) { animation-delay: 0.5s; }
-    .mc-card:nth-child(4) { animation-delay: 0.7s; }
-
-    @keyframes appear {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Hover do card */
-    .mc-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 25px #ffcc00, 0 8px 20px rgba(0,0,0,0.6);
-    }
-
-    /* Fundo do artista no card */
-    .mc-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: var(--bg-img);
-        background-size: cover;
-        background-position: center;
-        filter: blur(8px) brightness(0.4);
-        opacity: 0;
-        transition: opacity 0.4s, transform 0.4s;
-        transform: scale(1);
-        z-index: 0;
-    }
-
-    .mc-card:hover::before {
-        opacity: 1;
-        transform: scale(1.05);
-    }
-
-    /* Conteúdo acima do fundo */
-    .mc-card img,
-    .mc-card .mc-info {
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Imagem do MC */
-    .mc-card img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 10px;
-        border: 3px solid #ffcc00;
-    }
-
-    .mc-info h3 {
-        margin: 5px 0;
-        font-size: 20px;
-        color: #ffcc00;
-    }
-
-    /* Tags de estilo ou cidade */
-    .mc-tag {
-        font-size: 14px;
-        color: #ffdd55;
-        margin: 2px 0;
-    }
-
-    /* Contador de músicas/streams */
-    .mc-stats {
-        font-size: 14px;
-        color: #00c2ff;
-        margin: 2px 0 5px;
-    }
-
-    .mc-info a {
-        color: #00c2ff;
-        text-decoration: none;
-        font-size: 16px;
-        margin: 4px 0;
-        display: inline-block;
-        transition: color 0.2s;
-    }
-
-    .mc-info a:hover {
-        color: #ffcc00;
-        text-decoration: underline;
-    }
-
-    /* Botão voltar */
-    .voltar {
-        display: block;
-        text-align: center;
-        margin: 40px auto 0;
-        padding: 12px 20px;
-        background: #ffcc00;
-        color: #000;
-        border-radius: 12px;
-        font-weight: bold;
-        text-decoration: none;
-        width: 180px;
-        transition: background 0.2s;
-    }
-
-    .voltar:hover {
-        background: #e6b800;
-    }
-
-    @media (max-width: 600px) {
-        .mc-card img {
-            width: 100px;
-            height: 100px;
-        }
-
-        .mc-info h3 {
-            font-size: 18px;
-        }
-
-        .mc-info a, .mc-tag, .mc-stats {
-            font-size: 14px;
-        }
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10100f">
+    <title>MCs da Comunidade | Batalha do Núcleo</title>
+    <link rel="stylesheet" href="site.css">
 </head>
 <body>
-
-<h1>Artistas da Comunidade</h1>
-
-<div class="mc-list">
-
-    <!-- MC 1 -->
-    <div class="mc-card" style="--bg-img: url('steh.png');">
-        <img src="steh.png" alt="MC">
-        <div class="mc-info">
-            <h3>STEH</h3>
-            <p class="mc-tag">Rap • Recife-PE • </p>
-            <p class="mc-stats">🎵 4 músicas • 14 ouvintes/mês</p>
-            <a href="https://open.spotify.com/track/1CzoSU0DsIGX7IO5eNQ6JY?si=OhPtGCPOSQG_qh8E7XeLhA" target="_blank">🎵 Ouvir Música</a>
-            <a href="https://www.instagram.com/ogsteh_/" target="_blank">📸 Instagram</a>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="brand" href="index.html" aria-label="Batalha do Núcleo — início">
+                <img src="batalha.png" alt="">
+                <span class="brand-copy">
+                    <strong>Batalha do Núcleo</strong>
+                    <span>Rima, encontro e cultura</span>
+                </span>
+            </a>
+            <nav class="site-nav" aria-label="Navegação principal">
+                <a href="index.html">Início</a>
+                <a href="mcs.html" aria-current="page">MCs</a>
+                <a href="rank.html">Ranking</a>
+                <a href="biblioteca.html">Biblioteca</a>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <!-- MC 2 -->
-    <div class="mc-card" style="--bg-img: url('kapu.jpg');">
-        <img src="kapu.jpg" alt="MC">
-        <div class="mc-info">
-            <h3>KAPU</h3>
-            <p class="mc-tag">Trap • Recife-PE • </p>
-            <p class="mc-stats">🎵 7 músicas • 74 ouvintes/mês</p>
-            <a href="https://www.youtube.com/watch?v=tE2PCsaiTu0" target="_blank">🎵 Ouvir Música</a>
-            <a href="https://www.instagram.com/sidikaspo/" target="_blank">📸 Instagram</a>
-        </div>
-    </div>
+    <main class="page-shell">
+        <p class="eyebrow" style="justify-content: center;">Vozes da comunidade</p>
+        <h1 class="page-title">Artistas da Comunidade</h1>
+        <p class="page-intro">Conheça quem fortalece a cena e acompanha os artistas nas plataformas.</p>
 
-    <!-- MC 3 -->
-    <div class="mc-card" style="--bg-img: url('guedes.jpg');">
-        <img src="guedes.jpg" alt="MC">
-        <div class="mc-info">
-            <h3>GUEDES</h3>
-            <p class="mc-tag">BregaFunk • Recife-PE • 🔥 Em alta</p>
-            <p class="mc-stats">🎵 11 músicas • 64 ouvintes/mês</p>
-            <a href="https://open.spotify.com/artist/6TLd4RBBKDRIMVeJyA0Nxq?si=Zx3lkUmUQ7mcPSOIDEqkZA" target="_blank">🎵 Ouvir Música</a>
-            <a href="https://www.instagram.com/eoguedess?igsh=ZXAybzg5MnR0ZHVk&utm_source=qr" target="_blank">📸 Instagram</a>
-        </div>
-    </div>
+        <section class="artist-grid" aria-label="Artistas da comunidade">
+            <article class="artist-card">
+                <img class="artist-avatar" src="steh.png" alt="Foto de STEH" width="120" height="120">
+                <h2>STEH</h2>
+                <p class="artist-tag">Rap · Recife, PE</p>
+                <p class="artist-stats">4 músicas</p>
+                <div class="artist-links">
+                    <a href="https://open.spotify.com/track/1CzoSU0DsIGX7IO5eNQ6JY?si=OhPtGCPOSQG_qh8E7XeLhA" target="_blank" rel="noopener noreferrer">Ouvir música ↗</a>
+                    <a href="https://www.instagram.com/ogsteh_/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+                </div>
+            </article>
 
-    <!-- MC 4 -->
-    <div class="mc-card" style="--bg-img: url('lumi.jpg');">
-        <img src="lumi.jpg" alt="MC">
-        <div class="mc-info">
-            <h3>artista</h3>
-            <p class="mc-tag">Hip Hop • Curitiba • 🔥 Em alta</p>
-            <p class="mc-stats">🎵 0 músicas • 0 ouvintes/mês</p>
-            <a href="https://open.spotify.com/track/EXEMPLODELINK" target="_blank">🎵 Ouvir Música</a>
-            <a href="https://www.instagram.com/lumi_/" target="_blank">📸 Instagram</a>
-        </div>
-    </div>
+            <article class="artist-card">
+                <img class="artist-avatar" src="kapu.jpg" alt="Foto de KAPU" width="120" height="120" loading="lazy">
+                <h2>KAPU</h2>
+                <p class="artist-tag">Trap · Recife, PE</p>
+                <p class="artist-stats">7 músicas</p>
+                <div class="artist-links">
+                    <a href="https://www.youtube.com/watch?v=tE2PCsaiTu0" target="_blank" rel="noopener noreferrer">Ouvir música ↗</a>
+                    <a href="https://www.instagram.com/sidikaspo/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+                </div>
+            </article>
 
-</div>
+            <article class="artist-card">
+                <img class="artist-avatar" src="guedes.jpg" alt="Foto de GUEDES" width="120" height="120" loading="lazy">
+                <h2>GUEDES</h2>
+                <p class="artist-tag">Brega funk · Recife, PE · Em alta</p>
+                <p class="artist-stats">11 músicas</p>
+                <div class="artist-links">
+                    <a href="https://open.spotify.com/artist/6TLd4RBBKDRIMVeJyA0Nxq?si=Zx3lkUmUQ7mcPSOIDEqkZA" target="_blank" rel="noopener noreferrer">Ouvir música ↗</a>
+                    <a href="https://www.instagram.com/eoguedess?igsh=ZXAybzg5MnR0ZHVk&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+                </div>
+            </article>
+        </section>
 
-<a class="voltar" href="index.html">Voltar</a>
+        <a class="back-link" href="index.html">← Voltar ao início</a>
+    </main>
 
-<!-- Partículas -->
-<div class="particles">
-    <!-- 50 partículas -->
-    <div class="particle" style="left:5%; animation-duration:12s; width:3px; height:3px;"></div>
-    <div class="particle" style="left:15%; animation-duration:8s; width:4px; height:4px;"></div>
-    <div class="particle" style="left:25%; animation-duration:10s; width:2px; height:2px;"></div>
-    <div class="particle" style="left:35%; animation-duration:9s; width:3px; height:3px;"></div>
-    <div class="particle" style="left:45%; animation-duration:11s; width:4px; height:4px;"></div>
-    <div class="particle" style="left:55%; animation-duration:12s; width:2px; height:2px;"></div>
-    <div class="particle" style="left:65%; animation-duration:9s; width:3px; height:3px;"></div>
-    <div class="particle" style="left:75%; animation-duration:10s; width:4px; height:4px;"></div>
-    <div class="particle" style="left:85%; animation-duration:8s; width:2px; height:2px;"></div>
-    <div class="particle" style="left:95%; animation-duration:11s; width:3px; height:3px;"></div>
-</div>
-
+    <footer class="site-footer">
+        <p>Feito para a comunidade · MangueBoyz — Steh &amp; Kapu</p>
+    </footer>
 </body>
 </html>

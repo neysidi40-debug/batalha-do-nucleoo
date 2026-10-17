@@ -1,102 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biblioteca - Batalha do Núcleo</title>
-
-<style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: url('fundo.jpg') no-repeat center center fixed;
-        background-size: cover;
-        color: white;
-    }
-
-    body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(3px);
-        z-index: -1;
-    }
-
-    .content {
-        padding: 20px;
-        text-align: center;
-        max-width: 700px;
-        margin: auto;
-    }
-
-    h1 {
-        margin-bottom: 20px;
-    }
-
-    /* CARD DAS EDIÇÕES */
-    .edicao-card {
-        background: rgba(255,255,255,0.1);
-        border-radius: 12px;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid rgba(255,255,255,0.3);
-        transition: 0.3s;
-        cursor: pointer;
-    }
-
-    .edicao-card:hover {
-        background: rgba(255,255,255,0.2);
-        transform: scale(1.02);
-    }
-
-    .edicao-img {
-        width: 100%;
-        height: 160px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 8px;
-    }
-
-    a {
-        color: #00ffad;
-        font-weight: bold;
-        text-decoration: none;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10100f">
+    <title>Biblioteca | Batalha do Núcleo</title>
+    <link rel="stylesheet" href="site.css">
 </head>
 <body>
-
-<div class="content">
-    <h1>📚 Biblioteca</h1>
-    <p>Selecione uma edição para ver fotos, vídeos e links do Instagram.</p>
-
-    <!-- EDIÇÃO 1 -->
-    <a href="edicao1.html">
-        <div class="edicao-card">
-            <img src="1edicao.jpg" class="edicao-img">
-            <h3>Edição 1</h3>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="brand" href="index.html" aria-label="Batalha do Núcleo — início">
+                <img src="batalha.png" alt="">
+                <span class="brand-copy">
+                    <strong>Batalha do Núcleo</strong>
+                    <span>Rima, encontro e cultura</span>
+                </span>
+            </a>
+            <nav class="site-nav" aria-label="Navegação principal">
+                <a href="index.html">Início</a>
+                <a href="mcs.html">MCs</a>
+                <a href="rank.html">Ranking</a>
+                <a href="biblioteca.html" aria-current="page">Biblioteca</a>
+            </nav>
         </div>
-    </a>
+    </header>
 
-    <!-- EDIÇÃO 2 -->
-    <a href="edicao2.html">
-        <div class="edicao-card">
-            <img src="img2.jpg" class="edicao-img">
-            <h3>Edição 2</h3>
-        </div>
-    </a>
+    <main class="page-shell">
+        <p class="eyebrow" style="justify-content: center;">Memória da comunidade</p>
+        <h1 class="page-title">Biblioteca</h1>
+        <p class="page-intro">Fotos, vídeos e momentos que contam a história da Batalha do Núcleo.</p>
 
-    <!-- EDIÇÃO 3 -->
-    <a href="edicao3.html">
-        <div class="edicao-card">
-            <img src="img3.jpg" class="edicao-img">
-            <h3>Edição 3</h3>
-        </div>
-    </a>
+        <section class="edition-grid" aria-label="Edições da batalha">
+            <a class="edition-card" href="edicao1.html">
+                <img src="1edicao.jpg" alt="Registro da primeira edição da Batalha do Núcleo" width="800" height="450">
+                <div class="edition-card-copy">
+                    <h2>Edição 1</h2>
+                    <p>Praça Caetés · Fotos e vídeos</p>
+                </div>
+            </a>
+        </section>
+        <p class="empty-note">Novas edições serão adicionadas à biblioteca em breve.</p>
+    </main>
 
-    <a href="index.html">⬅ Voltar ao início</a>
-</div>
-
+    <footer class="site-footer">
+        <p>Feito para a comunidade · MangueBoyz — Steh &amp; Kapu</p>
+    </footer>
 </body>
 </html>

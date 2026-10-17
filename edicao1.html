@@ -1,147 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edição 1 – Batalha do Núcleo</title>
-
-<style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: url('fundo.jpg') no-repeat center center fixed;
-        background-size: cover;
-        color: white;
-    }
-
-    body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.7);
-        backdrop-filter: blur(3px);
-        z-index: -1;
-    }
-
-    .edicao-container {
-        padding: 25px;
-        text-align: center;
-        color: white;
-    }
-
-    h2 {
-        margin-bottom: 20px;
-        font-size: 26px;
-        font-weight: bold;
-    }
-
-    /* GALERIA COM FOTOS QUADRADAS */
-    .galeria {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-bottom: 30px;
-        justify-items: center;
-    }
-
-    .galeria img {
-        width: 160px;
-        height: 160px;
-        object-fit: cover;
-        border-radius: 15px;
-        box-shadow: 0 0 12px rgba(0,0,0,0.6);
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .galeria img:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 18px rgba(255,255,255,0.4);
-    }
-
-    /* LINKS INSTAGRAM */
-    .links-instagram a {
-        display: block;
-        background: #ff6a00;
-        padding: 14px;
-        margin: 10px 0;
-        border-radius: 15px;
-        text-decoration: none;
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        transition: transform 0.2s, background 0.2s;
-    }
-
-    .links-instagram a:hover {
-        background: #ff8800;
-        transform: scale(1.03);
-    }
-
-    /* SEÇÃO DE VÍDEOS */
-    h3 {
-        margin-top: 35px;
-        font-size: 22px;
-        font-weight: bold;
-    }
-
-    .video-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 22px;
-    }
-
-    .video-container iframe {
-        width: 100%;
-        max-width: 320px; /* VÍDEO REDUZIDO */
-        height: 570px;    /* Ajuste proporcional do Reels */
-        border-radius: 15px;
-        border: none;
-    }
-
-    .btn-voltar {
-        display: block;
-        margin-top: 25px;
-        text-decoration: none;
-        color: #ffd4b0;
-        font-weight: bold;
-        font-size: 16px;
-        transition: 0.2s;
-    }
-
-    .btn-voltar:hover {
-        color: white;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10100f">
+    <title>Edição 1 — Praça Caetés | Batalha do Núcleo</title>
+    <link rel="stylesheet" href="site.css">
 </head>
 <body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="brand" href="index.html" aria-label="Batalha do Núcleo — início">
+                <img src="batalha.png" alt="">
+                <span class="brand-copy">
+                    <strong>Batalha do Núcleo</strong>
+                    <span>Rima, encontro e cultura</span>
+                </span>
+            </a>
+            <nav class="site-nav" aria-label="Navegação principal">
+                <a href="index.html">Início</a>
+                <a href="mcs.html">MCs</a>
+                <a href="rank.html">Ranking</a>
+                <a href="biblioteca.html" aria-current="page">Biblioteca</a>
+            </nav>
+        </div>
+    </header>
 
-<div class="edicao-container">
-    <h2>Edição 1 – Praça Caetés</h2>
+    <main class="page-shell">
+        <p class="eyebrow" style="justify-content: center;">Arquivo da batalha</p>
+        <h1 class="page-title">Edição 1 — Praça Caetés</h1>
+        <p class="page-intro">Um pouco dos encontros, das rimas e da energia da primeira edição.</p>
 
-    <div class="galeria">
-        <img src="1edicao_foto1.png">
-        <img src="1edicao_foto2.png">
-        <img src="1edicao_foto3.png">
-        <img src="1edicao_foto4.jpg">
-    </div>
+        <section class="gallery" aria-label="Fotos da primeira edição">
+            <img src="1edicao_foto1.png" alt="Registro da primeira edição da batalha, foto 1" width="600" height="600">
+            <img src="1edicao_foto2.png" alt="Registro da primeira edição da batalha, foto 2" width="600" height="600" loading="lazy">
+            <img src="1edicao_foto3.png" alt="Registro da primeira edição da batalha, foto 3" width="600" height="600" loading="lazy">
+            <img src="1edicao_foto4.jpg" alt="Registro da primeira edição da batalha, foto 4" width="600" height="600" loading="lazy">
+        </section>
 
-    <h3>📽️ Vídeos da edição</h3>
+        <section class="section" aria-labelledby="titulo-videos">
+            <div class="section-heading">
+                <span class="info-label">Reels da comunidade</span>
+                <h2 id="titulo-videos">Vídeos da edição</h2>
+            </div>
+            <div class="video-grid">
+                <iframe
+                    class="video-frame"
+                    src="https://www.instagram.com/reel/DRXIfikEYbR/embed"
+                    title="Vídeo da primeira edição da Batalha do Núcleo no Instagram"
+                    loading="lazy"
+                    allowfullscreen></iframe>
+                <iframe
+                    class="video-frame"
+                    src="https://www.instagram.com/reel/DRVGI7wkVzV/embed"
+                    title="Segundo vídeo da primeira edição da Batalha do Núcleo no Instagram"
+                    loading="lazy"
+                    allowfullscreen></iframe>
+            </div>
+        </section>
 
-    <div class="video-container">
-        <iframe src="https://www.instagram.com/reel/DRXIfikEYbR/embed" allowfullscreen></iframe>
-    </div>
+        <section class="social-links" aria-label="Perfis relacionados à edição">
+            <a class="button button-primary" href="https://www.instagram.com/batalhadonucle0/" target="_blank" rel="noopener noreferrer">Instagram oficial ↗</a>
+            <a class="button button-secondary" href="https://www.instagram.com/leonardo_mendes_tks/" target="_blank" rel="noopener noreferrer">Artista destaque ↗</a>
+        </section>
 
-    <div class="video-container">
-        <iframe src="https://www.instagram.com/reel/DRVGI7wkVzV/embed" allowfullscreen></iframe>
-    </div>
+        <a class="back-link" href="biblioteca.html">← Voltar à biblioteca</a>
+    </main>
 
-    <div class="links-instagram">
-        <a href="https://www.instagram.com/batalhadonucle0/" target="_blank">Instagram Oficial</a>
-        <a href="https://www.instagram.com/leonardo_mendes_tks/" target="_blank">Artista destaque</a>
-    </div>
-
-    <a href="biblioteca.html" class="btn-voltar">Voltar</a>
-</div>
-
+    <footer class="site-footer">
+        <p>Feito para a comunidade · MangueBoyz — Steh &amp; Kapu</p>
+    </footer>
 </body>
 </html>
